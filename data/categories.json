@@ -1,0 +1,50 @@
+[
+  {
+    "slug": "cong-nghe-do-hay",
+    "title": "Công nghệ & Đồ hay",
+    "emoji": "⚙️",
+    "aliases": ["công nghệ", "đồ hay", "technology", "tech", "gadget"]
+  },
+  {
+    "slug": "khoa-hoc-bi-an",
+    "title": "Khoa học & Bí ẩn",
+    "emoji": "🔬",
+    "aliases": ["khoa học", "bí ẩn", "science", "mystery"]
+  },
+  {
+    "slug": "the-gioi-quanh-ta",
+    "title": "Thế giới quanh ta",
+    "emoji": "🌍",
+    "aliases": ["thế giới", "quanh ta", "world"]
+  },
+  {
+    "slug": "dong-vat-thien-nhien",
+    "title": "Động vật & Thiên nhiên",
+    "emoji": "🌿",
+    "aliases": ["động vật", "thiên nhiên", "animal", "nature"]
+  },
+  {
+    "slug": "meo-hay-30s",
+    "title": "Mẹo hay 30s",
+    "emoji": "💡",
+    "aliases": ["mẹo hay", "mẹo", "tips", "life hack"]
+  },
+  {
+    "slug": "san-pham-thu-vi",
+    "title": "Sản phẩm thú vị",
+    "emoji": "🛍️",
+    "aliases": ["sản phẩm", "đồ thú vị", "product", "shopping"]
+  },
+  {
+    "slug": "cau-do-thu-thach",
+    "title": "Câu đố & Thử thách",
+    "emoji": "🧩",
+    "aliases": ["câu đố", "thử thách", "quiz", "challenge"]
+  },
+  {
+    "slug": "top-su-that-nhanh",
+    "title": "Top & Sự thật nhanh",
+    "emoji": "✨",
+    "aliases": ["top", "sự thật", "facts", "fact"]
+  }
+]
