@@ -44,7 +44,26 @@ function formatViews(value) {
 }
 
 function escapeHTML(value = '') {
-  return value.replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
+  return String(value).replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
+}
+
+function safeAffiliateUrl(value = '') {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+  try {
+    const parsed = new URL(raw);
+    return ['http:', 'https:'].includes(parsed.protocol) ? parsed.href : '';
+  } catch {
+    return '';
+  }
+}
+
+function safeImageUrl(value = '') {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+  if (/^https?:\/\//i.test(raw)) return raw;
+  if (/^(?:\.\.?\/|\/)?[a-zA-Z0-9][a-zA-Z0-9_./-]*$/.test(raw)) return raw;
+  return '';
 }
 
 function getCategory(slug) {
@@ -175,26 +194,76 @@ function renderFilterStatus() {
   }
 }
 
+function affiliateMatchesCategory(item = {}) {
+  const categories = Array.isArray(item.categories) ? item.categories.filter(Boolean) : [];
+  return state.activeCategory === 'all' || categories.length === 0 || categories.includes(state.activeCategory);
+}
+
+function bindAffiliateTracking(root = document) {
+  $$('[data-affiliate-id]', root).forEach(link => {
+    if (link.dataset.affiliateBound === 'true') return;
+    link.dataset.affiliateBound = 'true';
+    link.addEventListener('click', () => {
+      const detail = {
+        affiliateId: link.dataset.affiliateId || '',
+        placement: link.dataset.affiliatePlacement || '',
+        provider: link.dataset.affiliateProvider || 'Shopee'
+      };
+      window.dispatchEvent(new CustomEvent('affiliateclick', { detail }));
+      if (Array.isArray(window.dataLayer)) {
+        window.dataLayer.push({ event: 'affiliate_click', ...detail });
+      }
+    });
+  });
+}
+
 function renderAffiliate() {
   const affiliate = state.affiliate || {};
-  $('#affiliateDisclosure').textContent = affiliate.disclosure || '';
+  const provider = affiliate.provider || 'Shopee';
+  const globallyEnabled = affiliate.enabled === true;
   const banner = affiliate.banner || {};
+  const bannerUrl = globallyEnabled && banner.enabled === true && affiliateMatchesCategory(banner) ? safeAffiliateUrl(banner.url) : '';
   const slot = $('#affiliateA');
-  if (banner.enabled && banner.url) {
+
+  if (bannerUrl) {
+    const bannerImage = safeImageUrl(banner.image);
+    const bannerId = banner.id || banner.campaignId || 'banner-main';
+    const cta = banner.cta || `Xem trên ${provider}`;
     slot.hidden = false;
-    slot.innerHTML = `<a class="affiliate-banner" href="${escapeHTML(banner.url)}" target="_blank" rel="sponsored nofollow noopener"><div><span class="ad-label">${escapeHTML(banner.label || 'Tiếp thị liên kết')}</span><h3>${escapeHTML(banner.title || '')}</h3><p>${escapeHTML(banner.description || '')}</p></div><span class="btn btn-primary">Xem trên Shopee ↗</span></a>`;
+    slot.innerHTML = `<a class="affiliate-banner${bannerImage ? ' has-image' : ''}" href="${escapeHTML(bannerUrl)}" target="_blank" rel="sponsored nofollow noopener" data-affiliate-id="${escapeHTML(bannerId)}" data-affiliate-placement="banner-after-latest" data-affiliate-provider="${escapeHTML(provider)}"><div class="affiliate-banner-copy"><span class="ad-label">${escapeHTML(banner.label || 'Tiếp thị liên kết')}</span><h3>${escapeHTML(banner.title || '')}</h3><p>${escapeHTML(banner.description || '')}</p></div>${bannerImage ? `<img class="affiliate-banner-image" src="${escapeHTML(bannerImage)}" alt="" loading="lazy" decoding="async">` : ''}<span class="btn btn-primary">${escapeHTML(cta)} ↗</span></a>`;
   } else {
     slot.hidden = true;
+    slot.innerHTML = '';
   }
 
-  const products = (affiliate.products || []).filter(p => p.enabled !== false && p.url);
+  const maxProducts = Math.max(1, Number(affiliate.settings?.maxProducts || 8));
+  const products = globallyEnabled ? (affiliate.products || [])
+    .filter(product => product.enabled !== false && affiliateMatchesCategory(product) && safeAffiliateUrl(product.url))
+    .slice(0, maxProducts) : [];
+
   const productSection = $('#affiliateProducts');
   if (products.length) {
     productSection.hidden = false;
-    $('#affiliateProductGrid').innerHTML = products.map(product => `<a class="product-card" href="${escapeHTML(product.url)}" target="_blank" rel="sponsored nofollow noopener">${product.image ? `<img src="${escapeHTML(product.image)}" alt="${escapeHTML(product.title || '')}" loading="lazy">` : ''}<h3>${escapeHTML(product.title || '')}</h3>${product.price ? `<strong>${escapeHTML(product.price)}</strong>` : ''}</a>`).join('');
+    $('#affiliateProductGrid').innerHTML = products.map((product, index) => {
+      const url = safeAffiliateUrl(product.url);
+      const image = safeImageUrl(product.image);
+      const id = product.id || `product-${index + 1}`;
+      const price = product.priceLabel || product.price || '';
+      const badge = product.badge || '';
+      const cta = product.cta || 'Xem sản phẩm';
+      return `<a class="product-card" href="${escapeHTML(url)}" target="_blank" rel="sponsored nofollow noopener" data-affiliate-id="${escapeHTML(id)}" data-affiliate-placement="product-grid" data-affiliate-provider="${escapeHTML(provider)}">${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.title || '')}" loading="lazy" decoding="async">` : '<div class="product-placeholder" aria-hidden="true">🛍️</div>'}<div class="product-card-copy">${badge ? `<span class="product-badge">${escapeHTML(badge)}</span>` : ''}<h3>${escapeHTML(product.title || '')}</h3><div class="product-card-footer">${price ? `<strong>${escapeHTML(price)}</strong>` : '<span></span>'}<span>${escapeHTML(cta)} ↗</span></div></div></a>`;
+    }).join('');
   } else {
     productSection.hidden = true;
+    $('#affiliateProductGrid').innerHTML = '';
   }
+
+  const disclosure = $('#affiliateDisclosure');
+  const hasActiveAffiliate = Boolean(bannerUrl || products.length);
+  disclosure.textContent = hasActiveAffiliate ? (affiliate.disclosure || '') : '';
+  disclosure.hidden = !hasActiveAffiliate || !affiliate.disclosure;
+  bindAffiliateTracking(slot);
+  bindAffiliateTracking(productSection);
 }
 
 function renderSyncStatus() {
