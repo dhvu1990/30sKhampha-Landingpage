@@ -7,32 +7,54 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: youtube-sync
   cancel-in-progress: true
 
 jobs:
-  sync:
+  sync-build:
     runs-on: ubuntu-latest
+    outputs:
+      api_key_available: ${{ steps.key.outputs.available }}
+      data_changed: ${{ steps.commit.outputs.changed }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+
+      - name: Check YouTube API key
+        id: key
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: |
+          if [ -n "$YOUTUBE_API_KEY" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "YOUTUBE_API_KEY is not configured. Skipping scheduled sync without failing the workflow."
+          fi
 
       - name: Setup Node
+        if: steps.key.outputs.available == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 22
 
       - name: Sync channel data
+        if: steps.key.outputs.available == 'true'
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: node scripts/sync-youtube.mjs
 
       - name: Commit changed data
+        if: steps.key.outputs.available == 'true'
+        id: commit
         run: |
           if git diff --quiet -- data/; then
-            echo "No YouTube changes."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No YouTube data changes."
             exit 0
           fi
           git config user.name "github-actions[bot]"
@@ -40,3 +62,34 @@ jobs:
           git add data/
           git commit -m "data: sync YouTube"
           git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Configure Pages
+        if: steps.key.outputs.available == 'true' && steps.commit.outputs.changed == 'true'
+        uses: actions/configure-pages@v5
+
+      - name: Prepare static site artifact
+        if: steps.key.outputs.available == 'true' && steps.commit.outputs.changed == 'true'
+        run: |
+          mkdir -p _site
+          cp index.html manifest.webmanifest robots.txt _site/
+          cp -R assets config data _site/
+          touch _site/.nojekyll
+
+      - name: Upload Pages artifact
+        if: steps.key.outputs.available == 'true' && steps.commit.outputs.changed == 'true'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    if: needs.sync-build.outputs.api_key_available == 'true' && needs.sync-build.outputs.data_changed == 'true'
+    needs: sync-build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
