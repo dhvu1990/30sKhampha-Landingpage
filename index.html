@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F4E8D3">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="30s Khám Phá - Khám phá nhanh những điều thú vị trong 30 giây.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="30s Khám Phá">
+  <meta property="og:description" content="Khám phá nhanh những điều thú vị trong 30 giây.">
+  <meta name="twitter:card" content="summary">
+  <title>30s Khám Phá</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://i.ytimg.com">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <a class="skip-link" href="#content">Bỏ qua đến nội dung</a>
+
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="30s Khám Phá - Trang chủ">
+        <span class="brand-text"><b>30s</b><strong>KHÁM PHÁ</strong></span>
+      </a>
+
+      <nav class="header-nav" aria-label="Điều hướng chính">
+        <a href="#latest">Mới nhất</a>
+        <a href="#categories">Danh mục</a>
+        <a href="#about">Giới thiệu</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="icon-btn" id="searchToggle" type="button" aria-label="Mở tìm kiếm" aria-expanded="false">⌕</button>
+        <a class="btn btn-youtube header-youtube" id="headerYoutube" href="https://www.youtube.com/@30sKhamPhaCuocSong" target="_blank" rel="noopener">YouTube ↗</a>
+        <button class="icon-btn menu-toggle" id="menuToggle" type="button" aria-label="Mở menu" aria-expanded="false">☰</button>
+      </div>
+    </div>
+
+    <div class="container search-panel" id="searchPanel" hidden>
+      <label for="searchInput">Tìm video</label>
+      <div class="search-box">
+        <span>⌕</span>
+        <input id="searchInput" type="search" placeholder="Nhập từ khóa, ví dụ: công nghệ..." autocomplete="off">
+        <button id="searchClear" type="button" aria-label="Xóa tìm kiếm">×</button>
+      </div>
+      <small id="searchHint">Tìm trong toàn bộ video đã đồng bộ từ YouTube.</small>
+    </div>
+
+    <div class="mobile-nav" id="mobileNav" hidden>
+      <a href="#latest">Video mới nhất</a>
+      <a href="#categories">Danh mục</a>
+      <a href="#about">Giới thiệu</a>
+      <a id="mobileYoutube" href="https://www.youtube.com/@30sKhamPhaCuocSong" target="_blank" rel="noopener">Kênh YouTube ↗</a>
+    </div>
+  </header>
+
+  <main id="content">
+    <section class="hero container" aria-labelledby="heroTitle">
+      <div class="hero-copy">
+        <div class="status-row">
+          <span class="eyebrow">HIỂU NHANH TRONG 30 GIÂY</span>
+          <span class="mode-pill" id="modePill">Đang tải…</span>
+        </div>
+        <h1 id="heroTitle">Mỗi ngày một điều <em>đáng khám phá.</em></h1>
+        <p class="hero-text">Video ngắn, trực quan và dễ hiểu. Website tự cập nhật theo kênh YouTube của 30s Khám Phá — không cần đăng lại nội dung.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#latest">Khám phá ngay ↓</a>
+          <a class="btn btn-secondary" id="youtubeChannelLink" href="https://www.youtube.com/@30sKhamPhaCuocSong" target="_blank" rel="noopener">Theo dõi YouTube ↗</a>
+        </div>
+        <div class="hero-meta" id="heroMeta">
+          <span><b id="videoCount">0</b> video</span>
+          <span class="dot">•</span>
+          <span>Tự động đồng bộ</span>
+          <span class="dot">•</span>
+          <span>Không quảng cáo chen ngang</span>
+        </div>
+      </div>
+
+      <div class="featured-shell">
+        <div class="featured-label">Video nổi bật</div>
+        <div class="featured-card" id="featuredVideo" aria-live="polite">
+          <div class="skeleton featured-skeleton"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="category-bar" id="categories" aria-label="Danh mục">
+      <div class="container category-inner">
+        <span class="category-caption">Khám phá theo chủ đề</span>
+        <div class="chips" id="categoryChips"></div>
+      </div>
+    </section>
+
+    <section class="section container" id="latest">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">MỚI CẬP NHẬT</p>
+          <h2>Video mới nhất</h2>
+        </div>
+        <div class="section-tools">
+          <span class="sync-status" id="syncStatus">Đang tải dữ liệu…</span>
+          <button class="view-toggle active" id="gridView" type="button" aria-label="Hiển thị dạng lưới">▦</button>
+          <button class="view-toggle" id="listView" type="button" aria-label="Hiển thị dạng danh sách">☷</button>
+        </div>
+      </div>
+
+      <div class="active-filter" id="activeFilter" hidden>
+        <span id="activeFilterText"></span>
+        <button id="clearFilter" type="button">Xóa lọc ×</button>
+      </div>
+
+      <div class="video-grid" id="latestGrid" aria-live="polite"></div>
+
+      <div class="empty-state" id="emptyState" hidden>
+        <div class="empty-icon">▶</div>
+        <h3>Chưa có video trên kênh.</h3>
+        <p>Ngay khi video đầu tiên được đăng lên YouTube, hệ thống đồng bộ sẽ tự đưa video lên website.</p>
+        <a class="btn btn-secondary" id="emptyYoutube" href="https://www.youtube.com/@30sKhamPhaCuocSong" target="_blank" rel="noopener">Mở kênh YouTube ↗</a>
+      </div>
+    </section>
+
+    <section class="affiliate-slot container" id="affiliateA" hidden></section>
+
+    <div id="categorySections"></div>
+
+    <section class="section container" id="affiliateProducts" hidden>
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">GỢI Ý HỮU ÍCH</p>
+          <h2>Có thể bạn sẽ thích</h2>
+        </div>
+        <span class="ad-label">Tiếp thị liên kết</span>
+      </div>
+      <div class="affiliate-products" id="affiliateProductGrid"></div>
+    </section>
+
+    <section class="subscribe-section container">
+      <div class="subscribe-card">
+        <div>
+          <span class="eyebrow">KHÁM PHÁ MỖI NGÀY</span>
+          <h2>30 giây để biết thêm một điều mới.</h2>
+          <p>Theo dõi kênh YouTube để xem video mới ngay khi được đăng.</p>
+        </div>
+        <a class="btn btn-youtube" id="subscribeYoutube" href="https://www.youtube.com/@30sKhamPhaCuocSong" target="_blank" rel="noopener">Mở kênh YouTube ↗</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="about">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <div class="brand footer-logo">
+          <span class="brand-text"><b>30s</b><strong>KHÁM PHÁ</strong></span>
+        </div>
+        <p>Khám phá · Hiểu biết · Truyền cảm hứng.</p>
+      </div>
+      <div>
+        <h3>Nội dung</h3>
+        <a href="#latest">Video mới nhất</a>
+        <a href="#categories">Danh mục</a>
+      </div>
+      <div>
+        <h3>Kết nối</h3>
+        <a id="footerYoutube" href="https://www.youtube.com/@30sKhamPhaCuocSong" target="_blank" rel="noopener">YouTube ↗</a>
+        <a id="footerFacebook" href="#" target="_blank" rel="noopener" hidden>Facebook ↗</a>
+        <a id="footerTiktok" href="#" target="_blank" rel="noopener" hidden>TikTok ↗</a>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p class="affiliate-disclosure" id="affiliateDisclosure"></p>
+      <p>© <span id="year"></span> 30s Khám Phá · v<span id="siteVersion">0.7.0</span></p>
+    </div>
+  </footer>
+
+  <button class="back-top" id="backTop" type="button" aria-label="Lên đầu trang">↑</button>
+
+  <dialog class="video-modal" id="videoModal">
+    <div class="modal-card">
+      <button class="modal-close" id="modalClose" type="button" aria-label="Đóng">×</button>
+      <div class="player-wrap" id="playerWrap"></div>
+      <div class="modal-info">
+        <div>
+          <span class="modal-category" id="modalCategory"></span>
+          <h3 id="modalTitle"></h3>
+        </div>
+        <div class="modal-actions">
+          <button class="share-btn" id="shareVideo" type="button">Chia sẻ</button>
+          <a id="modalYoutubeLink" target="_blank" rel="noopener">YouTube ↗</a>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <noscript>
+    <div class="noscript">Website cần JavaScript để tự tải danh sách video từ dữ liệu YouTube đã đồng bộ.</div>
+  </noscript>
+
+  <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>
