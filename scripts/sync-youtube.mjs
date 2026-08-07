@@ -23,7 +23,17 @@ async function youtube(endpoint, params) {
   const response = await fetch(url);
   if (!response.ok) {
     const body = await response.text();
-    throw new Error(`YouTube API ${response.status}: ${body}`);
+    let detail = null;
+    try {
+      detail = JSON.parse(body);
+    } catch {
+      // Keep raw response body in the message when Google does not return JSON.
+    }
+    const error = new Error(`YouTube API ${response.status}: ${body}`);
+    error.status = response.status;
+    error.reason = detail?.error?.errors?.[0]?.reason || null;
+    error.apiMessage = detail?.error?.message || null;
+    throw error;
   }
   return response.json();
 }
@@ -37,6 +47,22 @@ async function paginate(endpoint, params, maxItems = Infinity) {
     pageToken = data.nextPageToken || '';
   } while (pageToken && items.length < maxItems);
   return items.slice(0, maxItems);
+}
+
+function isPlaylistNotFound(error) {
+  return error?.status === 404 && error?.reason === 'playlistNotFound';
+}
+
+async function paginatePlaylistItems(params, maxItems = Infinity, label = 'playlist') {
+  try {
+    return await paginate('playlistItems', params, maxItems);
+  } catch (error) {
+    if (isPlaylistNotFound(error)) {
+      console.warn(`Bỏ qua ${label}: playlist chưa tồn tại hoặc chưa khả dụng (${params.playlistId}).`);
+      return [];
+    }
+    throw error;
+  }
 }
 
 function slugify(value = '') {
@@ -100,13 +126,16 @@ const channel = channelData.items?.[0];
 if (!channel) throw new Error(`Không tìm thấy channel theo handle ${handle}.`);
 
 const channelId = channel.id;
-const uploadsPlaylist = channel.contentDetails?.relatedPlaylists?.uploads;
-if (!uploadsPlaylist) throw new Error('Không tìm thấy uploads playlist của channel.');
-
-const uploadItems = await paginate('playlistItems', {
-  part: 'snippet,contentDetails,status',
-  playlistId: uploadsPlaylist
-}, 250);
+const uploadsPlaylist = channel.contentDetails?.relatedPlaylists?.uploads || '';
+let uploadItems = [];
+if (uploadsPlaylist) {
+  uploadItems = await paginatePlaylistItems({
+    part: 'snippet,contentDetails,status',
+    playlistId: uploadsPlaylist
+  }, 250, `uploads playlist của ${handle}`);
+} else {
+  console.warn(`Channel ${handle} chưa có uploads playlist khả dụng. Tiếp tục với 0 video.`);
+}
 
 const playlistResources = await paginate('playlists', {
   part: 'id,snippet,contentDetails,status',
@@ -121,10 +150,10 @@ for (const playlist of playlistResources) {
   if (!categoryConfig.some(c => c.slug === slug) && !generatedCategories.some(c => c.slug === slug)) {
     generatedCategories.push({ slug, title: playlistTitle, emoji: '✨', aliases: [] });
   }
-  const items = await paginate('playlistItems', {
+  const items = await paginatePlaylistItems({
     part: 'contentDetails,status',
     playlistId: playlist.id
-  }, 250);
+  }, 250, `playlist "${playlistTitle}"`);
   for (const item of items) {
     const videoId = item.contentDetails?.videoId;
     if (!videoId) continue;
