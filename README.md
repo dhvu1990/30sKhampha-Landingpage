@@ -1,6 +1,6 @@
-# 30s Khám Phá — Landing Page
+# 30s KHÁM PHÁ — Landing Page
 
-Phiên bản: **v0.8.2**
+Phiên bản: **v0.9.0**
 
 Website static một trang, không WordPress/CMS. Video tự đồng bộ từ YouTube.
 
@@ -77,6 +77,31 @@ Khi `data/videos.json` chưa có video, website hiển thị dữ liệu mẫu c
 - GitHub Actions sync mỗi 6 giờ + chạy thủ công.
 - GitHub Pages auto deploy từ `main`.
 
+## Branding v0.9.0
+
+Branding chính thức của **30s KHÁM PHÁ** đã được đưa lên live UI mà không redesign toàn bộ website.
+
+- Brand mark nguồn: `watermark (1).png` trong Google Drive Branding.
+- Web asset: `assets/brand/brand-mark.svg` — SVG wrapper chứa nguyên PNG nền trong suốt để dùng ổn định trên GitHub Pages.
+- Header: brand mark thật + chữ Unicode `KHÁM PHÁ` bằng Be Vietnam Pro ExtraBold.
+- Footer: dùng cùng nhận diện với header.
+- Favicon + Web App Manifest dùng cùng brand mark.
+- Demo Mode: thumbnail mẫu có watermark brand mark nhẹ ở góc phải dưới.
+- UI spacing logo đã được tinh chỉnh riêng cho desktop/mobile trong `assets/css/brand-v0.9.0.css`.
+
+Palette chính thức:
+- Paper Cream `#F4E8D3`
+- Brick Red `#A94335`
+- Charcoal Black `#252525`
+- Mustard Yellow `#D6A33A`
+- Muted Teal `#478784`
+
+Typography:
+- Be Vietnam Pro ExtraBold: heading / branding.
+- Be Vietnam Pro Medium / SemiBold: UI / body.
+
+Tagline chính thức: **HIỂU NHANH TRONG 30 GIÂY**.
+
 ## Bật đồng bộ YouTube
 
 1. Tạo YouTube Data API v3 key trong Google Cloud.
@@ -90,20 +115,13 @@ Script dùng `channels.list(forHandle=...)` để tự resolve Channel ID từ h
 
 Sửa `data/affiliate.json` khi có campaign/link Shopee. Nếu `enabled=false` hoặc URL trống, khu vực quảng cáo tự ẩn.
 
-## Branding
-
-Wordmark web dùng Unicode HTML `30s KHÁM PHÁ` để đảm bảo dấu tiếng Việt chính xác. Asset logo gốc/production được quản lý tại Google Drive dự án và sẽ đưa vào repo dạng web-optimized khi chốt asset binary.
-
-Palette chính thức:
-- Paper Cream `#F4E8D3`
-- Brick Red `#A94335`
-- Charcoal Black `#252525`
-- Mustard Yellow `#D6A33A`
-- Muted Teal `#478784`
-
 ## Quản lý dự án
 
 - **Source-of-truth:** GitHub repository này, branch `main`.
 - **Tài nguyên / tài liệu / nhật ký / backup:** Google Drive folder `1T4jul5aiUZ4m-9yBExrVx_IkU79uZd0q`.
-- Brand source tham chiếu: Google Drive folder `19FGsfgmmajtaRi5nV5w_6FspKMVdxTL_`.
+- **Branding chính thức:** Google Drive folder `1LOiNodV2htHHuRsn7r4shd3FUYbMMZlB`.
 - Mỗi lần chỉnh sửa dự án/source phải tăng version.
+
+## Bước tiếp theo
+
+Sau khi v0.9.0 branding được xác nhận ổn định trên live site, nhánh công việc kế tiếp là **v0.10.x — YouTube live integration hoàn chỉnh**: GitHub Secret, sync + deploy cùng workflow, Playlist → Category và xử lý channel rỗng/video mới.
