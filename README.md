@@ -1,6 +1,6 @@
 # 30s KHÁM PHÁ — Landing Page
 
-Phiên bản: **v0.10.1**
+Phiên bản: **v0.10.2**
 
 Website static một trang, không WordPress/CMS. Video tự đồng bộ từ YouTube.
 
@@ -38,7 +38,7 @@ Không có API key trong JavaScript frontend. `YOUTUBE_API_KEY` chỉ được �
 
 Workflow `.github/workflows/deploy-pages.yml` tự deploy khi source trên branch `main` thay đổi và hỗ trợ chạy thủ công.
 
-Workflow `.github/workflows/sync-youtube.yml` chạy mỗi 6 giờ, chạy thủ công, và từ v0.10.1 còn tự chạy khi các file cấu hình/sync liên quan thay đổi trên `main`. Workflow tự xử lý toàn bộ chuỗi **Sync YouTube → commit JSON nếu có thay đổi → build Pages → deploy Pages** trong cùng một workflow. Không còn phụ thuộc vào việc commit do `GITHUB_TOKEN` tạo ra phải kích hoạt workflow deploy khác.
+Workflow `.github/workflows/sync-youtube.yml` chạy mỗi 6 giờ, chạy thủ công, và từ v0.10.1 còn tự chạy khi các file cấu hình/sync liên quan thay đổi trên `main`. Workflow tự xử lý toàn bộ chuỗi **Sync YouTube → commit JSON nếu có thay đổi → build Pages → deploy Pages** trong cùng một workflow.
 
 Nếu `YOUTUBE_API_KEY` chưa được cấu hình, workflow Sync YouTube sẽ ghi rõ trạng thái skip và kết thúc sạch thay vì fail định kỳ.
 
@@ -61,6 +61,8 @@ Run deploy thành công đầu tiên sau khi bật Pages: run `#6`, deployment c
 `config/site.json` đặt `demoWhenEmpty: true`.
 
 Khi `data/videos.json` chưa có video, website hiển thị dữ liệu mẫu có nhãn **MẪU GIAO DIỆN** để kiểm tra đầy đủ UX. Ngay sau lần sync có video thật, dữ liệu mẫu tự biến mất.
+
+Từ v0.10.2, trường hợp channel đã tồn tại nhưng YouTube trả `playlistNotFound` cho uploads playlist được coi là **0 video** thay vì làm fail toàn bộ workflow. Metadata channel vẫn được đồng bộ và website tiếp tục Demo Mode cho tới khi có video public.
 
 ## Tính năng hiện tại
 
@@ -85,6 +87,7 @@ Khi `data/videos.json` chưa có video, website hiển thị dữ liệu mẫu c
 - GitHub Pages auto deploy từ `main`.
 - YouTube sync chỉ ghi JSON khi dữ liệu thực sự thay đổi; thay đổi riêng timestamp không còn tạo commit rác.
 - Khi dữ liệu YouTube thay đổi, Pages được build/deploy ngay trong workflow Sync YouTube.
+- Playlist bị xóa/chưa khả dụng không còn làm chết toàn bộ sync; `playlistNotFound` được bỏ qua an toàn.
 
 ## Branding v0.9.0
 
@@ -111,7 +114,7 @@ Typography:
 
 Tagline chính thức: **HIỂU NHANH TRONG 30 GIÂY**.
 
-## YouTube live integration — v0.10.1
+## YouTube live integration — v0.10.2
 
 `scripts/sync-youtube.mjs` và workflow Sync YouTube hiện xử lý:
 
@@ -125,17 +128,17 @@ Tagline chính thức: **HIỂU NHANH TRONG 30 GIÂY**.
 - Chỉ commit `data/` khi có thay đổi thực sự.
 - Sau commit dữ liệu mới, build và deploy GitHub Pages ngay trong cùng workflow.
 - Tự chạy validation khi workflow/script/config/category mapping thay đổi trên `main`.
+- Nhận diện lỗi YouTube API `404 / playlistNotFound` khi đọc playlist và coi playlist đó là rỗng.
+- Nếu uploads playlist chưa khả dụng, tiếp tục đồng bộ metadata channel với 0 video thay vì fail.
+- Nếu một playlist category bị xóa/không còn khả dụng, bỏ qua riêng playlist đó và tiếp tục các playlist khác.
 
 ### Trạng thái API key
 
-Người quản trị đã xác nhận tạo repository secret tên `YOUTUBE_API_KEY` trong GitHub Actions vào ngày 2026-08-08. Connector GitHub hiện không expose API đọc giá trị secret hoặc danh sách secret, nên trạng thái secret được ghi nhận theo xác nhận của người quản trị; giá trị key không được lưu trong source hoặc nhật ký.
+Người quản trị đã xác nhận tạo repository secret tên `YOUTUBE_API_KEY` trong GitHub Actions vào ngày 2026-08-08. Giá trị key không được lưu trong source hoặc nhật ký.
 
-### Test sync thật
+### Lỗi đã xử lý từ Sync YouTube #4
 
-- Commit v0.10.1 đã thêm push trigger có giới hạn path để tự kích hoạt `Sync YouTube` khi chính cấu hình sync thay đổi.
-- Sau trigger, kiểm tra `data/channel.json`, `data/videos.json` và GitHub Pages.
-- Nếu kênh chưa có video, `data/channel.json` vẫn phải được cập nhật từ API còn `videos` có thể rỗng; website tiếp tục Demo Mode.
-- Khi video public đầu tiên xuất hiện, lần sync kế tiếp phải tự sinh JSON, commit dữ liệu, deploy Pages và tự chuyển website sang dữ liệu thật.
+Run `31226005073` xác nhận Secret đã được nhận và lỗi xảy ra tại `Sync channel data` với `YouTube API 404`, reason `playlistNotFound`. v0.10.2 xử lý trực tiếp trường hợp này trong script thay vì coi là lỗi fatal.
 
 ## Affiliate
 
@@ -150,4 +153,4 @@ Sửa `data/affiliate.json` khi có campaign/link Shopee. Nếu `enabled=false` 
 
 ## Bước tiếp theo
 
-Xác minh run đầu tiên của `Sync YouTube` sau khi Secret được tạo. Khi xác minh end-to-end hoàn tất, nhánh tiếp theo là **Shopee Affiliate data/campaign**.
+Xác minh run `Sync YouTube` của v0.10.2. Kết quả kỳ vọng với channel chưa có video: `data/channel.json` có metadata thật, `data/videos.json` có thể vẫn rỗng và website tiếp tục Demo Mode. Sau khi sync end-to-end được xác nhận, nhánh tiếp theo là **Shopee Affiliate data/campaign**.
