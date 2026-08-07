@@ -1,9 +1,17 @@
 {
-  "name": "30s Khám Phá",
-  "short_name": "30s Khám Phá",
+  "name": "30s KHÁM PHÁ",
+  "short_name": "30s KHÁM PHÁ",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#F4E8D3",
   "theme_color": "#F4E8D3",
-  "lang": "vi"
+  "lang": "vi",
+  "icons": [
+    {
+      "src": "assets/brand/brand-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
 }
