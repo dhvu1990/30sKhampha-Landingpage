@@ -1,0 +1,12 @@
+{
+  "disclosure": "Một số liên kết trên website có thể là liên kết tiếp thị liên kết. 30s Khám Phá có thể nhận hoa hồng khi bạn mua hàng qua các liên kết này.",
+  "banner": {
+    "enabled": false,
+    "label": "Gợi ý từ Shopee",
+    "title": "Khám phá thêm sản phẩm thú vị",
+    "description": "Banner chiến dịch Shopee sẽ xuất hiện tại đây khi được cấu hình.",
+    "image": "",
+    "url": ""
+  },
+  "products": []
+}
