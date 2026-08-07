@@ -1,5 +1,35 @@
 # Changelog
 
+## v0.11.0 — 2026-08-08
+
+### Shopee Affiliate Foundation
+- Tăng version `0.10.2` → `0.11.0`.
+- Chuẩn hóa `data/affiliate.json` với cờ `enabled`, `provider`, `settings`, banner metadata, campaign ID, CTA, category targeting và products.
+- Mặc định toàn bộ affiliate vẫn **tắt**; không chèn link Shopee giả hoặc campaign giả.
+- Banner/product chỉ hiển thị khi global `enabled=true`, item hợp lệ và URL là HTTP(S).
+- Affiliate có thể target theo category; `categories: []` nghĩa là dùng cho mọi danh mục.
+- Tất cả affiliate link tiếp tục dùng `rel="sponsored nofollow noopener"`.
+- Disclosure chỉ hiển thị khi thực sự có banner/product affiliate đang hoạt động.
+
+### Affiliate UI/UX
+- Nâng `assets/js/app.js` để validate affiliate URL/image trước khi render.
+- Hỗ trợ banner image, product badge, CTA, priceLabel, placeholder khi chưa có ảnh.
+- Giới hạn số product hiển thị bằng `settings.maxProducts`.
+- Thêm event `affiliateclick` và hỗ trợ đẩy `affiliate_click` vào `window.dataLayer` nếu website tích hợp analytics sau này; không thêm tracker bên thứ ba mặc định.
+- Thêm `assets/css/affiliate-v0.11.0.css` để polish banner/product desktop/mobile mà không redesign website.
+- `assets/css/brand-v0.9.0.css` import stylesheet affiliate mới để không cần thay đổi markup hiện tại.
+
+### Commits
+- `6b86e2469f26783a1367f18acff5a632263c2868` — build Shopee affiliate rendering foundation.
+- `863cb7d6c112253a28f1b7d228be6adb3c87222d` — normalize affiliate data schema.
+- `eb3070133b2775b94f77c6319bce3e3d5712e652` — add affiliate UI stylesheet.
+- `cf08e14e8689f0b477d5fbf0aeb77d163ccd055f` — load affiliate stylesheet.
+- `bb46368098205de43f50ff0da2a19afe489eface` — bump config to v0.11.0.
+
+### Pending
+- Chưa có Shopee Affiliate banner/link/product thật, nên UI affiliate vẫn tự ẩn.
+- Bước tiếp theo là nhập campaign/link thật vào `data/affiliate.json` và kiểm tra placement/click behavior trên live site.
+
 ## v0.10.2 — 2026-08-08
 
 ### YouTube Empty/Unavailable Playlist Handling
