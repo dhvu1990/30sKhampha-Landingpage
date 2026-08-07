@@ -1,6 +1,6 @@
 # 30s Khám Phá — Landing Page
 
-Phiên bản: **v0.7.0**
+Phiên bản: **v0.8.0**
 
 Website static một trang, không WordPress/CMS. Video tự đồng bộ từ YouTube.
 
@@ -19,9 +19,27 @@ GitHub Actions (mỗi 6 giờ)
 data/videos.json + data/channel.json
    ↓
 Static HTML/CSS/JS
+   ↓
+GitHub Pages
 ```
 
 Không có API key trong JavaScript frontend. `YOUTUBE_API_KEY` chỉ nằm trong GitHub Actions Secret.
+
+## GitHub Pages — v0.8.0
+
+Workflow `.github/workflows/deploy-pages.yml` tự deploy khi có thay đổi trên branch `main` và cũng hỗ trợ chạy thủ công.
+
+Artifact public chỉ gồm các file website cần thiết:
+- `index.html`
+- `manifest.webmanifest`
+- `robots.txt`
+- `assets/`
+- `config/`
+- `data/`
+
+Các thư mục source/tooling như `scripts/`, `.github/` và tài liệu repository không được đưa vào artifact website.
+
+Repository vẫn giữ trạng thái private. GitHub Pages cho private repository phụ thuộc gói GitHub của tài khoản; nếu Pages chưa được bật, workflow dùng `actions/configure-pages` với `enablement: true` để yêu cầu kích hoạt khi quyền/gói cho phép.
 
 ## Chế độ khi kênh chưa có video
 
@@ -29,8 +47,11 @@ Không có API key trong JavaScript frontend. `YOUTUBE_API_KEY` chỉ nằm tron
 
 Khi `data/videos.json` chưa có video, website hiển thị dữ liệu mẫu có nhãn **MẪU GIAO DIỆN** để kiểm tra đầy đủ UX. Ngay sau lần sync có video thật, dữ liệu mẫu tự biến mất.
 
-## Tính năng v0.7.0
+## Tính năng v0.8.0
 
+- Toàn bộ tính năng v0.7.0.
+- GitHub Pages deployment tự động từ `main`.
+- Artifact deploy được whitelist, không publish source tooling/tài liệu repo.
 - Mobile-first, responsive.
 - Header sticky + mobile menu.
 - Search toàn bộ video.
@@ -47,7 +68,7 @@ Khi `data/videos.json` chưa có video, website hiển thị dữ liệu mẫu c
 - Back-to-top, empty state, loading state.
 - YouTube sync bằng handle, không cần hard-code Channel ID.
 - Playlist tự map thành category; playlist lạ tự tạo category mới.
-- GitHub Actions chạy mỗi 6 giờ + chạy thủ công.
+- GitHub Actions sync mỗi 6 giờ + chạy thủ công.
 
 ## Bật đồng bộ YouTube
 
