@@ -1,5 +1,29 @@
 # Changelog
 
+## v0.10.1 — 2026-08-08
+
+### Validation Trigger
+- Tăng version `0.10.0` → `0.10.1`.
+- Người quản trị đã xác nhận tạo GitHub Actions repository secret `YOUTUBE_API_KEY`.
+- Thêm trigger `push` có giới hạn path cho workflow `Sync YouTube` để tự chạy khi các file cấu hình/sync thay đổi trên `main`:
+  - `.github/workflows/sync-youtube.yml`
+  - `scripts/sync-youtube.mjs`
+  - `config/site.json`
+  - `data/categories.json`
+- Mục đích: tự kích hoạt validation end-to-end sau thay đổi cấu hình mà không cần phụ thuộc vào thao tác `workflow_dispatch` từ connector.
+- Lịch chạy mỗi 6 giờ và chạy thủ công vẫn được giữ nguyên.
+
+### Commits
+- `78544e11fc572885a5ae51fedf6c5e7277e5c6b1` — bump config to v0.10.1.
+- `13ea4166d6dd3f4232841956ae1eeeefafd56d9b` — add auto-validation push trigger to Sync YouTube workflow.
+- `0af64eeb9109124d21eb810894c54db656cb59b7` — update README for v0.10.1 validation state.
+
+### Verification Status
+- GitHub source readback PASS for v0.10.1 config/workflow.
+- Immediately after trigger commit, `data/channel.json` was still unchanged (`syncedAt: null`, `id: null`), so the YouTube API run had not yet been proven successful at that check point.
+- Current GitHub connector does not expose generic push-triggered workflow run listing/dispatch, and runtime web access to the Actions page is unavailable due cache limitations.
+- Do not mark YouTube sync or Pages deploy as successful until `data/channel.json` readback or an Actions run provides evidence.
+
 ## v0.10.0 — 2026-08-08
 
 ### YouTube Live Integration
@@ -114,7 +138,7 @@
 - Category sections tự sinh.
 - Grid/List view.
 - Featured video tự động.
-- Modal player privacy-enhanced `youtube-nocookie.com`.
+- Modal player privacy-enhanced `youtube-nocookie.com`, chỉ load iframe khi click.
 - Web Share/copy-link.
 - Responsive mobile menu.
 - Affiliate banner/product-card config.
