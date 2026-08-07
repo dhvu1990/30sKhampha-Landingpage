@@ -1,6 +1,6 @@
 # 30s KHÁM PHÁ — Landing Page
 
-Phiên bản: **v0.10.0**
+Phiên bản: **v0.10.1**
 
 Website static một trang, không WordPress/CMS. Video tự đồng bộ từ YouTube.
 
@@ -21,7 +21,7 @@ Website static một trang, không WordPress/CMS. Video tự đồng bộ từ Y
 ```text
 YouTube
    ↓ YouTube Data API
-GitHub Actions Sync YouTube (mỗi 6 giờ)
+GitHub Actions Sync YouTube (mỗi 6 giờ / thủ công / thay đổi cấu hình sync)
    ↓
 data/videos.json + data/channel.json + data/categories.json
    ↓ nếu dữ liệu thực sự thay đổi
@@ -38,7 +38,7 @@ Không có API key trong JavaScript frontend. `YOUTUBE_API_KEY` chỉ được �
 
 Workflow `.github/workflows/deploy-pages.yml` tự deploy khi source trên branch `main` thay đổi và hỗ trợ chạy thủ công.
 
-Workflow `.github/workflows/sync-youtube.yml` chạy mỗi 6 giờ hoặc thủ công. Từ v0.10.0 workflow này tự xử lý toàn bộ chuỗi **Sync YouTube → commit JSON nếu có thay đổi → build Pages → deploy Pages** trong cùng một workflow. Không còn phụ thuộc vào việc commit do `GITHUB_TOKEN` tạo ra phải kích hoạt workflow deploy khác.
+Workflow `.github/workflows/sync-youtube.yml` chạy mỗi 6 giờ, chạy thủ công, và từ v0.10.1 còn tự chạy khi các file cấu hình/sync liên quan thay đổi trên `main`. Workflow tự xử lý toàn bộ chuỗi **Sync YouTube → commit JSON nếu có thay đổi → build Pages → deploy Pages** trong cùng một workflow. Không còn phụ thuộc vào việc commit do `GITHUB_TOKEN` tạo ra phải kích hoạt workflow deploy khác.
 
 Nếu `YOUTUBE_API_KEY` chưa được cấu hình, workflow Sync YouTube sẽ ghi rõ trạng thái skip và kết thúc sạch thay vì fail định kỳ.
 
@@ -81,7 +81,7 @@ Khi `data/videos.json` chưa có video, website hiển thị dữ liệu mẫu c
 - Back-to-top, empty state, loading state.
 - YouTube sync bằng handle, không cần hard-code Channel ID.
 - Playlist tự map thành category; playlist lạ tự tạo category mới.
-- GitHub Actions sync mỗi 6 giờ + chạy thủ công.
+- GitHub Actions sync mỗi 6 giờ + chạy thủ công + tự validation khi cấu hình sync thay đổi.
 - GitHub Pages auto deploy từ `main`.
 - YouTube sync chỉ ghi JSON khi dữ liệu thực sự thay đổi; thay đổi riêng timestamp không còn tạo commit rác.
 - Khi dữ liệu YouTube thay đổi, Pages được build/deploy ngay trong workflow Sync YouTube.
@@ -111,7 +111,7 @@ Typography:
 
 Tagline chính thức: **HIỂU NHANH TRONG 30 GIÂY**.
 
-## YouTube live integration — v0.10.0
+## YouTube live integration — v0.10.1
 
 `scripts/sync-youtube.mjs` và workflow Sync YouTube hiện xử lý:
 
@@ -124,16 +124,18 @@ Tagline chính thức: **HIỂU NHANH TRONG 30 GIÂY**.
 - So sánh dữ liệu cũ/mới và không ghi lại file chỉ vì `syncedAt` thay đổi.
 - Chỉ commit `data/` khi có thay đổi thực sự.
 - Sau commit dữ liệu mới, build và deploy GitHub Pages ngay trong cùng workflow.
+- Tự chạy validation khi workflow/script/config/category mapping thay đổi trên `main`.
 
-### Bật đồng bộ YouTube thật
+### Trạng thái API key
 
-1. Tạo YouTube Data API v3 key trong Google Cloud.
-2. GitHub repository → Settings → Secrets and variables → Actions.
-3. Tạo repository secret tên chính xác: `YOUTUBE_API_KEY`.
-4. Chạy workflow `Sync YouTube` thủ công lần đầu.
-5. Kiểm tra `data/channel.json`, `data/videos.json` và GitHub Pages sau run.
+Người quản trị đã xác nhận tạo repository secret tên `YOUTUBE_API_KEY` trong GitHub Actions vào ngày 2026-08-08. Connector GitHub hiện không expose API đọc giá trị secret hoặc danh sách secret, nên trạng thái secret được ghi nhận theo xác nhận của người quản trị; giá trị key không được lưu trong source hoặc nhật ký.
 
-Hiện connector GitHub không expose API quản lý repository secrets, nên secret này phải được tạo trong giao diện GitHub.
+### Test sync thật
+
+- Commit v0.10.1 đã thêm push trigger có giới hạn path để tự kích hoạt `Sync YouTube` khi chính cấu hình sync thay đổi.
+- Sau trigger, kiểm tra `data/channel.json`, `data/videos.json` và GitHub Pages.
+- Nếu kênh chưa có video, `data/channel.json` vẫn phải được cập nhật từ API còn `videos` có thể rỗng; website tiếp tục Demo Mode.
+- Khi video public đầu tiên xuất hiện, lần sync kế tiếp phải tự sinh JSON, commit dữ liệu, deploy Pages và tự chuyển website sang dữ liệu thật.
 
 ## Affiliate
 
@@ -148,6 +150,4 @@ Sửa `data/affiliate.json` khi có campaign/link Shopee. Nếu `enabled=false` 
 
 ## Bước tiếp theo
 
-Sau khi tạo `YOUTUBE_API_KEY`, chạy test sync thật lần đầu. Nếu kênh vẫn chưa có video, workflow phải hoàn tất sạch và website tiếp tục Demo Mode. Khi video đầu tiên được public, lần sync kế tiếp phải tự sinh JSON, commit dữ liệu, deploy Pages và tự chuyển website sang dữ liệu thật.
-
-Sau khi YouTube live integration được xác nhận end-to-end, nhánh tiếp theo là **Shopee Affiliate data/campaign**.
+Xác minh run đầu tiên của `Sync YouTube` sau khi Secret được tạo. Khi xác minh end-to-end hoàn tất, nhánh tiếp theo là **Shopee Affiliate data/campaign**.
