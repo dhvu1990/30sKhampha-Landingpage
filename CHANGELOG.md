@@ -1,5 +1,40 @@
 # Changelog
 
+## v0.10.0 — 2026-08-08
+
+### YouTube Live Integration
+- Nâng `config/site.json` từ `0.9.0` lên `0.10.0`.
+- Nâng `scripts/sync-youtube.mjs` để so sánh dữ liệu cũ/mới trước khi ghi file.
+- Không còn tạo commit chỉ vì trường `syncedAt` thay đổi.
+- Chỉ cập nhật `data/videos.json`, `data/channel.json` hoặc `data/categories.json` khi nội dung tương ứng thực sự thay đổi.
+- Giữ cơ chế resolve Channel ID bằng YouTube handle, lấy uploads playlist, metadata/statistics và Playlist → Category.
+- Demo Mode tiếp tục tự tắt khi có video thật trong `data/videos.json`.
+
+### GitHub Actions
+- Nâng `.github/workflows/sync-youtube.yml` thành pipeline end-to-end: **Sync → commit data → build Pages → deploy Pages**.
+- Không còn phụ thuộc vào commit do `GITHUB_TOKEN` tạo ra để kích hoạt workflow deploy thứ hai.
+- Thêm quyền `pages: write` và `id-token: write` cho workflow Sync YouTube để deploy Pages trực tiếp.
+- Nếu repository secret `YOUTUBE_API_KEY` chưa tồn tại, workflow sẽ skip phần sync một cách sạch thay vì fail theo lịch mỗi 6 giờ.
+- Chỉ build/deploy Pages trong workflow Sync YouTube khi dữ liệu YouTube thực sự thay đổi.
+- Workflow deploy source thông thường `.github/workflows/deploy-pages.yml` vẫn giữ nguyên cho các push source lên `main`.
+
+### Documentation
+- README cập nhật kiến trúc v0.10.0 và quy trình bật `YOUTUBE_API_KEY`.
+- Ghi rõ GitHub connector hiện không expose API quản lý repository secrets; secret phải tạo trong GitHub Settings → Secrets and variables → Actions.
+
+### GitHub commits
+- `a0b7e9c141114d3e69e96bc376b8f4b59857d482` — bump site config to v0.10.0.
+- `472010f6acddccb0c47f7d1ae64257763fbd7238` — avoid no-op YouTube sync commits.
+- `3f927d1d90a5a03a01b928173cad5148edf01357` — sync YouTube and deploy Pages in one workflow.
+- `beb4bfab1a4a798192fbe6059127a0dc68182e8b` — document YouTube live integration.
+
+### Verification / Pending
+- GitHub connector read/write trên `main` hoạt động bình thường.
+- `data/videos.json` hiện vẫn rỗng và `data/channel.json` vẫn ở trạng thái chưa sync thật.
+- Connector không cung cấp thao tác đọc/tạo repository secret nên chưa thể xác nhận `YOUTUBE_API_KEY` đã được cấu hình.
+- Cần tạo secret và chạy `Sync YouTube` thủ công lần đầu để test end-to-end với YouTube Data API.
+- Runtime hiện không thể xác minh Pages qua public URL do hạn chế DNS/cache; không ghi nhận deploy v0.10.0 là Success khi chưa có bằng chứng Actions/live readback.
+
 ## v0.9.0 — 2026-08-08
 
 ### Branding
