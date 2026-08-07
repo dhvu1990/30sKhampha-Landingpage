@@ -72,6 +72,26 @@ function chunk(array, size) {
   return out;
 }
 
+function stable(value) {
+  if (Array.isArray(value)) return value.map(stable);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.keys(value).sort().map(key => [key, stable(value[key])]));
+  }
+  return value;
+}
+
+function sameData(a, b) {
+  return JSON.stringify(stable(a)) === JSON.stringify(stable(b));
+}
+
+async function readJSON(filePath, fallback) {
+  try {
+    return JSON.parse(await fs.readFile(filePath, 'utf8'));
+  } catch {
+    return fallback;
+  }
+}
+
 const channelData = await youtube('channels', {
   part: 'id,snippet,contentDetails,statistics',
   forHandle: handle
@@ -145,10 +165,14 @@ const videos = uploadIds.map(id => detailMap.get(id)).filter(Boolean).filter(vid
   };
 }).sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
 
-const syncedAt = new Date().toISOString();
-await fs.writeFile(path.join(root, 'data/videos.json'), JSON.stringify({ syncedAt, channelId, videos }, null, 2) + '\n');
-await fs.writeFile(path.join(root, 'data/channel.json'), JSON.stringify({
-  syncedAt,
+const videosPath = path.join(root, 'data/videos.json');
+const channelPath = path.join(root, 'data/channel.json');
+const categoriesPath = path.join(root, 'data/categories.json');
+const previousVideos = await readJSON(videosPath, { syncedAt: null, channelId: null, videos: [] });
+const previousChannel = await readJSON(channelPath, {});
+
+const nextVideosCore = { channelId, videos };
+const nextChannelCore = {
   id: channelId,
   title: channel.snippet?.title || site.siteName,
   handle,
@@ -156,11 +180,29 @@ await fs.writeFile(path.join(root, 'data/channel.json'), JSON.stringify({
   subscriberCount: channel.statistics?.hiddenSubscriberCount ? null : Number(channel.statistics?.subscriberCount || 0),
   videoCount: Number(channel.statistics?.videoCount || videos.length),
   viewCount: Number(channel.statistics?.viewCount || 0)
-}, null, 2) + '\n');
+};
 
-if (generatedCategories.length) {
-  const merged = [...categoryConfig, ...generatedCategories];
-  await fs.writeFile(path.join(root, 'data/categories.json'), JSON.stringify(merged, null, 2) + '\n');
+const previousVideosCore = { channelId: previousVideos.channelId ?? null, videos: previousVideos.videos || [] };
+const { syncedAt: _previousChannelSyncedAt, ...previousChannelCore } = previousChannel;
+const nextCategories = generatedCategories.length ? [...categoryConfig, ...generatedCategories] : categoryConfig;
+const videosChanged = !sameData(previousVideosCore, nextVideosCore);
+const channelChanged = !sameData(previousChannelCore, nextChannelCore);
+const categoriesChanged = !sameData(categoryConfig, nextCategories);
+
+if (!videosChanged && !channelChanged && !categoriesChanged) {
+  console.log(`Không có thay đổi YouTube cho ${channel.snippet?.title || handle}. Không ghi lại JSON.`);
+  process.exit(0);
 }
 
-console.log(`Đồng bộ xong ${videos.length} video từ ${channel.snippet?.title || handle}.`);
+const syncedAt = new Date().toISOString();
+if (videosChanged) {
+  await fs.writeFile(videosPath, JSON.stringify({ syncedAt, ...nextVideosCore }, null, 2) + '\n');
+}
+if (channelChanged || videosChanged) {
+  await fs.writeFile(channelPath, JSON.stringify({ syncedAt, ...nextChannelCore }, null, 2) + '\n');
+}
+if (categoriesChanged) {
+  await fs.writeFile(categoriesPath, JSON.stringify(nextCategories, null, 2) + '\n');
+}
+
+console.log(`Đồng bộ xong ${videos.length} video từ ${channel.snippet?.title || handle}. Dữ liệu đã thay đổi.`);
