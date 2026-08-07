@@ -113,7 +113,7 @@ Tagline chính thức: **HIỂU NHANH TRONG 30 GIÂY**.
 
 ## YouTube live integration — v0.10.0
 
-`script/sync-youtube.mjs` và workflow Sync YouTube hiện xử lý:
+`scripts/sync-youtube.mjs` và workflow Sync YouTube hiện xử lý:
 
 - Resolve Channel ID từ `@30sKhamPhaCuocSong` bằng `channels.list(forHandle=...)`.
 - Lấy uploads playlist, metadata video, statistics và danh sách playlist.
