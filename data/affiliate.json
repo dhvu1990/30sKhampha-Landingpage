@@ -1,12 +1,23 @@
 {
-  "disclosure": "Một số liên kết trên website có thể là liên kết tiếp thị liên kết. 30s Khám Phá có thể nhận hoa hồng khi bạn mua hàng qua các liên kết này.",
+  "enabled": false,
+  "provider": "Shopee",
+  "disclosure": "Một số liên kết trên website là liên kết tiếp thị liên kết. 30s KHÁM PHÁ có thể nhận hoa hồng khi bạn mua hàng qua các liên kết này mà không làm tăng giá sản phẩm.",
+  "settings": {
+    "maxProducts": 8,
+    "openInNewTab": true,
+    "trackClicks": true
+  },
   "banner": {
+    "id": "shopee-main-banner",
     "enabled": false,
+    "campaignId": "",
     "label": "Gợi ý từ Shopee",
     "title": "Khám phá thêm sản phẩm thú vị",
     "description": "Banner chiến dịch Shopee sẽ xuất hiện tại đây khi được cấu hình.",
+    "cta": "Xem trên Shopee",
     "image": "",
-    "url": ""
+    "url": "",
+    "categories": []
   },
   "products": []
 }
