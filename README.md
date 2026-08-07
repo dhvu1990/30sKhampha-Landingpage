@@ -1,8 +1,14 @@
 # 30s Khám Phá — Landing Page
 
-Phiên bản: **v0.8.0**
+Phiên bản: **v0.8.2**
 
 Website static một trang, không WordPress/CMS. Video tự đồng bộ từ YouTube.
+
+## Website live
+
+- GitHub Pages: `https://dhvu1990.github.io/30sKhampha-Landingpage/`
+- Trạng thái: **LIVE**
+- Deploy workflow: `.github/workflows/deploy-pages.yml`
 
 ## Kênh YouTube
 
@@ -25,11 +31,11 @@ GitHub Pages
 
 Không có API key trong JavaScript frontend. `YOUTUBE_API_KEY` chỉ nằm trong GitHub Actions Secret.
 
-## GitHub Pages — v0.8.0
+## GitHub Pages
 
-Workflow `.github/workflows/deploy-pages.yml` tự deploy khi có thay đổi trên branch `main` và cũng hỗ trợ chạy thủ công.
+Workflow `.github/workflows/deploy-pages.yml` tự deploy khi có thay đổi trên branch `main` và hỗ trợ chạy thủ công.
 
-Artifact public chỉ gồm các file website cần thiết:
+Artifact public chỉ gồm:
 - `index.html`
 - `manifest.webmanifest`
 - `robots.txt`
@@ -37,9 +43,11 @@ Artifact public chỉ gồm các file website cần thiết:
 - `config/`
 - `data/`
 
-Các thư mục source/tooling như `scripts/`, `.github/` và tài liệu repository không được đưa vào artifact website.
+Các thư mục tooling như `scripts/`, `.github/` và tài liệu repository không được đưa vào website.
 
-Repository vẫn giữ trạng thái private. GitHub Pages cho private repository phụ thuộc gói GitHub của tài khoản; nếu Pages chưa được bật, workflow dùng `actions/configure-pages` với `enablement: true` để yêu cầu kích hoạt khi quyền/gói cho phép.
+Repository hiện là **Public**. GitHub Pages được bật với **Source = GitHub Actions**.
+
+Run deploy thành công đầu tiên sau khi bật Pages: run `#6`, deployment commit `20f9d47ad3ff82ce57e624d14b13a8c408e7911d`.
 
 ## Chế độ khi kênh chưa có video
 
@@ -47,11 +55,9 @@ Repository vẫn giữ trạng thái private. GitHub Pages cho private repositor
 
 Khi `data/videos.json` chưa có video, website hiển thị dữ liệu mẫu có nhãn **MẪU GIAO DIỆN** để kiểm tra đầy đủ UX. Ngay sau lần sync có video thật, dữ liệu mẫu tự biến mất.
 
-## Tính năng v0.8.0
+## Tính năng hiện tại
 
-- Toàn bộ tính năng v0.7.0.
-- GitHub Pages deployment tự động từ `main`.
-- Artifact deploy được whitelist, không publish source tooling/tài liệu repo.
+- Static landing/content page, không CMS.
 - Mobile-first, responsive.
 - Header sticky + mobile menu.
 - Search toàn bộ video.
@@ -63,17 +69,18 @@ Khi `data/videos.json` chưa có video, website hiển thị dữ liệu mẫu c
 - Chia sẻ video qua Web Share API hoặc copy link.
 - Demo mode tự động khi kênh trống.
 - Affiliate banner + product cards đọc từ `data/affiliate.json`.
-- Affiliate link tự dùng `rel="sponsored nofollow noopener"`.
+- Affiliate link dùng `rel="sponsored nofollow noopener"`.
 - Không popup quảng cáo, không sticky Shopee che nội dung.
 - Back-to-top, empty state, loading state.
 - YouTube sync bằng handle, không cần hard-code Channel ID.
 - Playlist tự map thành category; playlist lạ tự tạo category mới.
 - GitHub Actions sync mỗi 6 giờ + chạy thủ công.
+- GitHub Pages auto deploy từ `main`.
 
 ## Bật đồng bộ YouTube
 
 1. Tạo YouTube Data API v3 key trong Google Cloud.
-2. Vào GitHub repository → Settings → Secrets and variables → Actions.
+2. GitHub repository → Settings → Secrets and variables → Actions.
 3. Tạo secret: `YOUTUBE_API_KEY`.
 4. Chạy workflow `Sync YouTube` thủ công lần đầu.
 
@@ -81,11 +88,11 @@ Script dùng `channels.list(forHandle=...)` để tự resolve Channel ID từ h
 
 ## Affiliate
 
-Sửa duy nhất `data/affiliate.json` khi có campaign/link Shopee. Nếu `enabled=false` hoặc không có URL, khu vực quảng cáo tự ẩn hoàn toàn.
+Sửa `data/affiliate.json` khi có campaign/link Shopee. Nếu `enabled=false` hoặc URL trống, khu vực quảng cáo tự ẩn.
 
 ## Branding
 
-Wordmark web dùng Unicode HTML `30s KHÁM PHÁ` để đảm bảo dấu tiếng Việt luôn đúng. Asset logo gốc/production được quản lý tại Google Drive dự án và sẽ được đưa vào repo ở dạng web-optimized khi chốt file binary.
+Wordmark web dùng Unicode HTML `30s KHÁM PHÁ` để đảm bảo dấu tiếng Việt chính xác. Asset logo gốc/production được quản lý tại Google Drive dự án và sẽ đưa vào repo dạng web-optimized khi chốt asset binary.
 
 Palette chính thức:
 - Paper Cream `#F4E8D3`
