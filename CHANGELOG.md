@@ -1,5 +1,20 @@
 # Changelog
 
+## v0.8.2 — 2026-08-07
+
+### Changed
+- Xác nhận repository đã Public.
+- Bật GitHub Pages với Source = GitHub Actions.
+- GitHub Pages deploy thành công tại `https://dhvu1990.github.io/30sKhampha-Landingpage/`.
+- Run deploy thành công đầu tiên: `Deploy GitHub Pages #6`, tổng thời gian 32s.
+- Build và Deploy đều `success`.
+- Deployment commit: `20f9d47ad3ff82ce57e624d14b13a8c408e7911d`.
+- README cập nhật trạng thái LIVE.
+
+### Notes
+- GitHub Actions hiện hiển thị warning Node.js 20 deprecated cho một số action; workflow vẫn chạy thành công và GitHub tự ép chạy trên Node.js 24. Đây chưa phải lỗi chặn deploy.
+- Bước kế tiếp: v0.9.0 rà soát UI/UX website live trên desktop/mobile và chuẩn bị tích hợp YouTube thật.
+
 ## v0.8.0 — 2026-08-07
 
 ### Added
@@ -10,11 +25,10 @@
 
 ### Changed
 - Tăng version website lên `0.8.0`.
-- README cập nhật kiến trúc GitHub Pages và nguyên tắc giữ repository private.
+- README cập nhật kiến trúc GitHub Pages.
 
 ### Notes
 - Workflow dùng `actions/configure-pages@v5`, `actions/upload-pages-artifact@v4`, `actions/deploy-pages@v4`.
-- GitHub Pages cho private repository yêu cầu gói GitHub có hỗ trợ Pages private repository.
 - `YOUTUBE_API_KEY` vẫn chưa được cấu hình trong GitHub Actions Secret.
 
 ## v0.7.0 — 2026-08-07
