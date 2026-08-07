@@ -1,6 +1,6 @@
 # 30s KHÁM PHÁ — Landing Page
 
-Phiên bản: **v0.10.2**
+Phiên bản: **v0.11.0**
 
 Website static một trang, không WordPress/CMS. Video tự đồng bộ từ YouTube.
 
@@ -30,6 +30,8 @@ Commit dữ liệu + Build Pages + Deploy Pages
 Static HTML/CSS/JS
    ↓
 GitHub Pages
+   ↓
+Shopee Affiliate links từ data/affiliate.json
 ```
 
 Không có API key trong JavaScript frontend. `YOUTUBE_API_KEY` chỉ được đọc trong GitHub Actions Secret.
@@ -79,6 +81,10 @@ Từ v0.10.2, trường hợp channel đã tồn tại nhưng YouTube trả `pla
 - Demo mode tự động khi kênh trống.
 - Affiliate banner + product cards đọc từ `data/affiliate.json`.
 - Affiliate link dùng `rel="sponsored nofollow noopener"`.
+- Affiliate URL được validate HTTP(S) trước khi render.
+- Banner/product affiliate có thể target theo category.
+- Disclosure chỉ xuất hiện khi affiliate thật sự đang hoạt động.
+- Có event `affiliateclick` và hook `dataLayer` tùy chọn cho analytics sau này.
 - Không popup quảng cáo, không sticky Shopee che nội dung.
 - Back-to-top, empty state, loading state.
 - YouTube sync bằng handle, không cần hard-code Channel ID.
@@ -136,13 +142,43 @@ Tagline chính thức: **HIỂU NHANH TRONG 30 GIÂY**.
 
 Người quản trị đã xác nhận tạo repository secret tên `YOUTUBE_API_KEY` trong GitHub Actions vào ngày 2026-08-08. Giá trị key không được lưu trong source hoặc nhật ký.
 
-### Lỗi đã xử lý từ Sync YouTube #4
+### Kết quả sync thật
 
-Run `31226005073` xác nhận Secret đã được nhận và lỗi xảy ra tại `Sync channel data` với `YouTube API 404`, reason `playlistNotFound`. v0.10.2 xử lý trực tiếp trường hợp này trong script thay vì coi là lỗi fatal.
+v0.10.2 đã sync thành công metadata channel vào `data/channel.json` và commit dữ liệu `81d8db3032c71b0cb12ba84dc786fc556ed37f85`. Channel hiện chưa có video public nên `data/videos.json` có `videos: []`; website tiếp tục Demo Mode đúng thiết kế.
 
-## Affiliate
+## Shopee Affiliate — v0.11.0
 
-Sửa `data/affiliate.json` khi có campaign/link Shopee. Nếu `enabled=false` hoặc URL trống, khu vực quảng cáo tự ẩn.
+Affiliate được quản lý tại `data/affiliate.json`. Mặc định `enabled: false`, vì vậy website không hiển thị banner/product cho đến khi có link thật.
+
+### Quy tắc bật affiliate
+
+- Đặt `enabled: true` ở cấp global.
+- Banner cần `banner.enabled: true` và `banner.url` hợp lệ.
+- Product cần `enabled !== false` và `url` hợp lệ.
+- Chỉ URL `http://` hoặc `https://` mới được render.
+- `categories: []` = hiển thị với mọi category.
+- Ví dụ `categories: ["cong-nghe-do-hay"]` = chỉ hiển thị khi người dùng đang lọc category đó.
+- `settings.maxProducts` giới hạn số sản phẩm render, mặc định 8.
+- `priceLabel` được ưu tiên; vẫn hỗ trợ field cũ `price`.
+- Có thể dùng `badge`, `cta`, `image`, `campaignId`, `id` để quản lý campaign rõ ràng.
+
+Ví dụ một product:
+
+```json
+{
+  "id": "product-example-01",
+  "enabled": true,
+  "title": "Tên sản phẩm",
+  "priceLabel": "199.000₫",
+  "badge": "Đáng chú ý",
+  "cta": "Xem sản phẩm",
+  "image": "https://...",
+  "url": "https://...affiliate-link...",
+  "categories": ["cong-nghe-do-hay"]
+}
+```
+
+Affiliate link luôn mở tab mới và dùng `rel="sponsored nofollow noopener"`. Disclosure ở footer chỉ hiện khi thực tế có affiliate đang hoạt động. Website không cài tracker bên thứ ba mặc định; nếu sau này có `window.dataLayer`, click affiliate sẽ phát event `affiliate_click`.
 
 ## Quản lý dự án
 
@@ -153,4 +189,4 @@ Sửa `data/affiliate.json` khi có campaign/link Shopee. Nếu `enabled=false` 
 
 ## Bước tiếp theo
 
-Xác minh run `Sync YouTube` của v0.10.2. Kết quả kỳ vọng với channel chưa có video: `data/channel.json` có metadata thật, `data/videos.json` có thể vẫn rỗng và website tiếp tục Demo Mode. Sau khi sync end-to-end được xác nhận, nhánh tiếp theo là **Shopee Affiliate data/campaign**.
+Cung cấp banner/link/product Shopee Affiliate thật. Sau đó cấu hình `data/affiliate.json`, bật `enabled`, kiểm tra category targeting, CTA, disclosure và click behavior trên live site. Không cần thay đổi kiến trúc website để đưa campaign mới lên.
