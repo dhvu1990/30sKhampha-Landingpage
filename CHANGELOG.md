@@ -1,5 +1,32 @@
 # Changelog
 
+## v0.10.2 — 2026-08-08
+
+### YouTube Empty/Unavailable Playlist Handling
+- Tăng version `0.10.1` → `0.10.2`.
+- Phân tích trực tiếp GitHub Actions run `31226005073` / `Sync YouTube #4`.
+- Xác nhận `YOUTUBE_API_KEY` đã được workflow nhận; lỗi không nằm ở Secret.
+- Root cause: bước `Sync channel data` nhận `YouTube API 404`, reason `playlistNotFound` khi đọc playlist bằng `playlistItems.list`.
+- `scripts/sync-youtube.mjs` giờ parse metadata lỗi YouTube API (`status`, `reason`, message) thay vì chỉ ném raw text.
+- Thêm helper nhận diện `404 / playlistNotFound` và trả về danh sách rỗng cho playlist không tồn tại/chưa khả dụng.
+- Nếu uploads playlist của channel chưa khả dụng, sync tiếp tục với `0 video` thay vì fail.
+- Nếu một playlist category bị xóa/không khả dụng, chỉ bỏ qua playlist đó và tiếp tục các playlist còn lại.
+- Các lỗi API khác vẫn tiếp tục throw để không che giấu lỗi thật.
+
+### Expected Behavior
+- Channel chưa có video: vẫn ghi được metadata thật vào `data/channel.json`; `data/videos.json` có thể rỗng; website tiếp tục Demo Mode.
+- Khi video public đầu tiên xuất hiện, lần sync kế tiếp sẽ lấy video, commit dữ liệu và deploy Pages theo pipeline v0.10.x.
+
+### Commits
+- `a0534633af2d7e1c8987d6dc134d3aee18c05814` — handle unavailable YouTube playlists.
+- `4baa71df974219c17f8f3ae849450d9b06ff8048` — bump config to v0.10.2.
+- `bfa72d0adb392bff222398951ae23e7424e5ab28` — document v0.10.2 behavior in README.
+
+### Verification Status
+- Source readback confirmed v0.10.2 changes are on `main`.
+- Push trigger should automatically start a new `Sync YouTube` validation run because `scripts/sync-youtube.mjs` and `config/site.json` are included in workflow path filters.
+- Final end-to-end status must be confirmed from the new Actions run or updated `data/channel.json`; do not infer success from source changes alone.
+
 ## v0.10.1 — 2026-08-08
 
 ### Validation Trigger
