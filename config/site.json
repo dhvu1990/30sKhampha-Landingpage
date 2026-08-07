@@ -1,0 +1,18 @@
+{
+  "version": "0.7.0",
+  "siteName": "30s Khám Phá",
+  "tagline": "Hiểu nhanh trong 30 giây",
+  "description": "Khám phá nhanh những điều thú vị về công nghệ, khoa học, thế giới, thiên nhiên, mẹo hay và sự thật bất ngờ.",
+  "youtubeHandle": "@30sKhamPhaCuocSong",
+  "youtubeUrl": "https://www.youtube.com/@30sKhamPhaCuocSong",
+  "demoWhenEmpty": true,
+  "latestCount": 8,
+  "maxVideosPerSection": 6,
+  "minVideosPerCategory": 1,
+  "featuredMode": "latest",
+  "social": {
+    "youtube": "https://www.youtube.com/@30sKhamPhaCuocSong",
+    "facebook": "",
+    "tiktok": ""
+  }
+}
