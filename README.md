@@ -1,14 +1,15 @@
 # 30s KHÁM PHÁ — Landing Page
 
-Phiên bản: **v0.9.0**
+Phiên bản: **v0.10.0**
 
 Website static một trang, không WordPress/CMS. Video tự đồng bộ từ YouTube.
 
 ## Website live
 
 - GitHub Pages: `https://dhvu1990.github.io/30sKhampha-Landingpage/`
-- Trạng thái: **LIVE**
-- Deploy workflow: `.github/workflows/deploy-pages.yml`
+- Trạng thái nền tảng: **LIVE từ mốc v0.8.2**
+- Deploy source thông thường: `.github/workflows/deploy-pages.yml`
+- YouTube sync + deploy dữ liệu mới: `.github/workflows/sync-youtube.yml`
 
 ## Kênh YouTube
 
@@ -20,20 +21,26 @@ Website static một trang, không WordPress/CMS. Video tự đồng bộ từ Y
 ```text
 YouTube
    ↓ YouTube Data API
-GitHub Actions (mỗi 6 giờ)
+GitHub Actions Sync YouTube (mỗi 6 giờ)
    ↓
-data/videos.json + data/channel.json
+data/videos.json + data/channel.json + data/categories.json
+   ↓ nếu dữ liệu thực sự thay đổi
+Commit dữ liệu + Build Pages + Deploy Pages
    ↓
 Static HTML/CSS/JS
    ↓
 GitHub Pages
 ```
 
-Không có API key trong JavaScript frontend. `YOUTUBE_API_KEY` chỉ nằm trong GitHub Actions Secret.
+Không có API key trong JavaScript frontend. `YOUTUBE_API_KEY` chỉ được đọc trong GitHub Actions Secret.
 
 ## GitHub Pages
 
-Workflow `.github/workflows/deploy-pages.yml` tự deploy khi có thay đổi trên branch `main` và hỗ trợ chạy thủ công.
+Workflow `.github/workflows/deploy-pages.yml` tự deploy khi source trên branch `main` thay đổi và hỗ trợ chạy thủ công.
+
+Workflow `.github/workflows/sync-youtube.yml` chạy mỗi 6 giờ hoặc thủ công. Từ v0.10.0 workflow này tự xử lý toàn bộ chuỗi **Sync YouTube → commit JSON nếu có thay đổi → build Pages → deploy Pages** trong cùng một workflow. Không còn phụ thuộc vào việc commit do `GITHUB_TOKEN` tạo ra phải kích hoạt workflow deploy khác.
+
+Nếu `YOUTUBE_API_KEY` chưa được cấu hình, workflow Sync YouTube sẽ ghi rõ trạng thái skip và kết thúc sạch thay vì fail định kỳ.
 
 Artifact public chỉ gồm:
 - `index.html`
@@ -76,10 +83,12 @@ Khi `data/videos.json` chưa có video, website hiển thị dữ liệu mẫu c
 - Playlist tự map thành category; playlist lạ tự tạo category mới.
 - GitHub Actions sync mỗi 6 giờ + chạy thủ công.
 - GitHub Pages auto deploy từ `main`.
+- YouTube sync chỉ ghi JSON khi dữ liệu thực sự thay đổi; thay đổi riêng timestamp không còn tạo commit rác.
+- Khi dữ liệu YouTube thay đổi, Pages được build/deploy ngay trong workflow Sync YouTube.
 
 ## Branding v0.9.0
 
-Branding chính thức của **30s KHÁM PHÁ** đã được đưa lên live UI mà không redesign toàn bộ website.
+Branding chính thức của **30s KHÁM PHÁ** đã được đưa vào UI mà không redesign toàn bộ website.
 
 - Brand mark nguồn: `watermark (1).png` trong Google Drive Branding.
 - Web asset: `assets/brand/brand-mark.svg` — SVG wrapper chứa nguyên PNG nền trong suốt để dùng ổn định trên GitHub Pages.
@@ -87,7 +96,7 @@ Branding chính thức của **30s KHÁM PHÁ** đã được đưa lên live UI
 - Footer: dùng cùng nhận diện với header.
 - Favicon + Web App Manifest dùng cùng brand mark.
 - Demo Mode: thumbnail mẫu có watermark brand mark nhẹ ở góc phải dưới.
-- UI spacing logo đã được tinh chỉnh riêng cho desktop/mobile trong `assets/css/brand-v0.9.0.css`.
+- UI spacing logo được tinh chỉnh riêng cho desktop/mobile trong `assets/css/brand-v0.9.0.css`.
 
 Palette chính thức:
 - Paper Cream `#F4E8D3`
@@ -102,14 +111,29 @@ Typography:
 
 Tagline chính thức: **HIỂU NHANH TRONG 30 GIÂY**.
 
-## Bật đồng bộ YouTube
+## YouTube live integration — v0.10.0
+
+`script/sync-youtube.mjs` và workflow Sync YouTube hiện xử lý:
+
+- Resolve Channel ID từ `@30sKhamPhaCuocSong` bằng `channels.list(forHandle=...)`.
+- Lấy uploads playlist, metadata video, statistics và danh sách playlist.
+- Map Playlist → Category theo `data/categories.json`.
+- Tự tạo category cho playlist mới chưa có mapping.
+- Chỉ giữ video public.
+- Tự tắt Demo Mode khi `data/videos.json` có video thật.
+- So sánh dữ liệu cũ/mới và không ghi lại file chỉ vì `syncedAt` thay đổi.
+- Chỉ commit `data/` khi có thay đổi thực sự.
+- Sau commit dữ liệu mới, build và deploy GitHub Pages ngay trong cùng workflow.
+
+### Bật đồng bộ YouTube thật
 
 1. Tạo YouTube Data API v3 key trong Google Cloud.
 2. GitHub repository → Settings → Secrets and variables → Actions.
-3. Tạo secret: `YOUTUBE_API_KEY`.
+3. Tạo repository secret tên chính xác: `YOUTUBE_API_KEY`.
 4. Chạy workflow `Sync YouTube` thủ công lần đầu.
+5. Kiểm tra `data/channel.json`, `data/videos.json` và GitHub Pages sau run.
 
-Script dùng `channels.list(forHandle=...)` để tự resolve Channel ID từ handle.
+Hiện connector GitHub không expose API quản lý repository secrets, nên secret này phải được tạo trong giao diện GitHub.
 
 ## Affiliate
 
@@ -124,4 +148,6 @@ Sửa `data/affiliate.json` khi có campaign/link Shopee. Nếu `enabled=false` 
 
 ## Bước tiếp theo
 
-Sau khi v0.9.0 branding được xác nhận ổn định trên live site, nhánh công việc kế tiếp là **v0.10.x — YouTube live integration hoàn chỉnh**: GitHub Secret, sync + deploy cùng workflow, Playlist → Category và xử lý channel rỗng/video mới.
+Sau khi tạo `YOUTUBE_API_KEY`, chạy test sync thật lần đầu. Nếu kênh vẫn chưa có video, workflow phải hoàn tất sạch và website tiếp tục Demo Mode. Khi video đầu tiên được public, lần sync kế tiếp phải tự sinh JSON, commit dữ liệu, deploy Pages và tự chuyển website sang dữ liệu thật.
+
+Sau khi YouTube live integration được xác nhận end-to-end, nhánh tiếp theo là **Shopee Affiliate data/campaign**.
