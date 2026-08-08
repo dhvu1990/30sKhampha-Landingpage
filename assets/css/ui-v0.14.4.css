@@ -1,0 +1,74 @@
+@import url("ui-v0.14.2.css?v=0.14.2");
+
+/* YouTube brand mark: red container + white play triangle. */
+.header-social-icon.youtube {
+  color: #FF0000;
+}
+
+.header-social-icon.youtube .youtube-mark,
+.youtube-follow-icon {
+  width: 20px;
+  height: 20px;
+  display: block;
+  flex: 0 0 20px;
+}
+
+#youtubeChannelLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+#youtubeChannelLink .youtube-follow-icon {
+  width: 19px;
+  height: 19px;
+  flex-basis: 19px;
+}
+
+/* Footer visitor count stays quiet and secondary to navigation. */
+.footer-bottom {
+  gap: 14px 24px;
+  flex-wrap: wrap;
+}
+
+.visitor-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 30px;
+  padding: 5px 10px;
+  border: 1px solid rgba(255, 255, 255, .10);
+  border-radius: 999px;
+  color: rgba(255, 255, 255, .72);
+  background: rgba(255, 255, 255, .045);
+  font-size: .76rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.visitor-counter[hidden] {
+  display: none !important;
+}
+
+.visitor-counter svg {
+  width: 15px;
+  height: 15px;
+  color: #D6A33A;
+  flex: 0 0 15px;
+}
+
+.visitor-counter strong {
+  color: #fff;
+  font-weight: 800;
+}
+
+@media (max-width: 680px) {
+  #youtubeChannelLink {
+    gap: 7px;
+  }
+
+  .footer-bottom {
+    align-items: flex-start;
+  }
+}
