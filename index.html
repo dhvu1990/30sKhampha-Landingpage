@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/brand-v0.11.3.css?v=0.11.3">
   <link rel="stylesheet" href="assets/css/video-affiliate-v0.13.0.css?v=0.13.0">
+  <link rel="stylesheet" href="assets/css/ui-v0.13.2.css?v=0.13.2">
 </head>
 <body>
   <a class="skip-link" href="#content">Bỏ qua đến nội dung</a>
@@ -39,6 +40,8 @@
 
       <div class="header-actions">
         <button class="icon-btn" id="searchToggle" type="button" aria-label="Mở tìm kiếm" aria-expanded="false">⌕</button>
+        <a class="header-social-btn header-facebook" href="https://www.facebook.com/30skhampha" target="_blank" rel="noopener" aria-label="Facebook 30s Khám Phá">Facebook ↗</a>
+        <a class="header-social-btn header-tiktok" href="https://www.tiktok.com/@30skhampha" target="_blank" rel="noopener" aria-label="TikTok 30s Khám Phá">TikTok ↗</a>
         <a class="btn btn-youtube header-youtube" id="headerYoutube" href="https://www.youtube.com/@30sKhamPhaCuocSong" target="_blank" rel="noopener">YouTube ↗</a>
         <button class="icon-btn menu-toggle" id="menuToggle" type="button" aria-label="Mở menu" aria-expanded="false">☰</button>
       </div>
@@ -55,7 +58,9 @@
       <a href="#latest">Mới nhất</a>
       <a href="#categories">Danh mục</a>
       <a href="#about">Giới thiệu</a>
-      <a id="mobileYoutube" href="https://www.youtube.com/@30sKhamPhaCuocSong" target="_blank" rel="noopener">YouTube ↗</a>
+      <a class="mobile-social-link" href="https://www.facebook.com/30skhampha" target="_blank" rel="noopener">Facebook ↗</a>
+      <a class="mobile-social-link" href="https://www.tiktok.com/@30skhampha" target="_blank" rel="noopener">TikTok ↗</a>
+      <a class="mobile-social-link" id="mobileYoutube" href="https://www.youtube.com/@30sKhamPhaCuocSong" target="_blank" rel="noopener">YouTube ↗</a>
     </nav>
   </header>
 
@@ -64,7 +69,7 @@
       <div class="hero-copy">
         <div class="hero-kicker">
           <span class="eyebrow">HIỂU NHANH TRONG 30 GIÂY</span>
-          <span class="mode-pill" id="modePill">Đang tải dữ liệu...</span>
+          <span class="mode-pill" id="modePill" hidden>Đang tải dữ liệu...</span>
         </div>
         <h1>Mỗi ngày một điều <em>đáng khám phá.</em></h1>
         <p>Video ngắn, trực quan và dễ hiểu. Website tự cập nhật theo kênh YouTube của 30s KHÁM PHÁ CÔNG NGHỆ &amp; ĐỜI SỐNG – không cần đăng lại nội dung.</p>
@@ -72,13 +77,7 @@
           <a class="btn btn-primary" href="#latest">Khám phá ngay ↓</a>
           <a class="btn btn-secondary" id="youtubeChannelLink" href="https://www.youtube.com/@30sKhamPhaCuocSong" target="_blank" rel="noopener">Theo dõi YouTube ↗</a>
         </div>
-        <div class="hero-meta">
-          <span><strong id="videoCount">0</strong> video</span>
-          <span>•</span>
-          <span>Tự động đồng bộ</span>
-          <span>•</span>
-          <span>Không quảng cáo chen ngang</span>
-        </div>
+        <span id="videoCount" hidden>0</span>
       </div>
       <div class="featured-wrap">
         <span class="featured-label">Video nổi bật</span>
@@ -169,7 +168,7 @@
     </div>
     <div class="container footer-bottom">
       <p class="affiliate-disclosure" id="affiliateDisclosure"></p>
-      <p>© <span id="year"></span> 30s KHÁM PHÁ CÔNG NGHỆ &amp; ĐỜI SỐNG · v<span id="siteVersion">0.13.0</span></p>
+      <p>© <span id="year"></span> 30s KHÁM PHÁ CÔNG NGHỆ &amp; ĐỜI SỐNG · v<span id="siteVersion">0.13.2</span></p>
     </div>
   </footer>
 
