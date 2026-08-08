@@ -20,6 +20,7 @@
   <link rel="preconnect" href="https://i.ytimg.com">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/brand-v0.11.3.css?v=0.11.3">
+  <link rel="stylesheet" href="assets/css/video-affiliate-v0.13.0.css?v=0.13.0">
 </head>
 <body>
   <a class="skip-link" href="#content">Bỏ qua đến nội dung</a>
@@ -43,56 +44,50 @@
       </div>
     </div>
 
-    <div class="container search-panel" id="searchPanel" hidden>
-      <label for="searchInput">Tìm video</label>
-      <div class="search-box">
-        <span>⌕</span>
-        <input id="searchInput" type="search" placeholder="Nhập từ khóa, ví dụ: công nghệ..." autocomplete="off">
-        <button id="searchClear" type="button" aria-label="Xóa tìm kiếm">×</button>
+    <div class="search-panel" id="searchPanel" hidden>
+      <div class="container search-inner">
+        <input id="searchInput" type="search" placeholder="Tìm video..." autocomplete="off" aria-label="Tìm video">
+        <button id="searchClear" type="button">Xóa</button>
       </div>
-      <small id="searchHint">Tìm trong toàn bộ video đã đồng bộ từ YouTube.</small>
     </div>
 
-    <div class="mobile-nav" id="mobileNav" hidden>
-      <a href="#latest">Video mới nhất</a>
+    <nav class="mobile-nav" id="mobileNav" aria-label="Điều hướng di động" hidden>
+      <a href="#latest">Mới nhất</a>
       <a href="#categories">Danh mục</a>
       <a href="#about">Giới thiệu</a>
-      <a id="mobileYoutube" href="https://www.youtube.com/@30sKhamPhaCuocSong" target="_blank" rel="noopener">Kênh YouTube ↗</a>
-    </div>
+      <a id="mobileYoutube" href="https://www.youtube.com/@30sKhamPhaCuocSong" target="_blank" rel="noopener">YouTube ↗</a>
+    </nav>
   </header>
 
   <main id="content">
-    <section class="hero container" aria-labelledby="heroTitle">
+    <section class="hero container">
       <div class="hero-copy">
-        <div class="status-row">
+        <div class="hero-kicker">
           <span class="eyebrow">HIỂU NHANH TRONG 30 GIÂY</span>
-          <span class="mode-pill" id="modePill">Đang tải…</span>
+          <span class="mode-pill" id="modePill">Đang tải dữ liệu...</span>
         </div>
-        <h1 id="heroTitle">Mỗi ngày một điều <em>đáng khám phá.</em></h1>
-        <p class="hero-text">Video ngắn, trực quan và dễ hiểu. Website tự cập nhật theo kênh YouTube của 30s KHÁM PHÁ CÔNG NGHỆ &amp; ĐỜI SỐNG — không cần đăng lại nội dung.</p>
+        <h1>Mỗi ngày một điều <em>đáng khám phá.</em></h1>
+        <p>Video ngắn, trực quan và dễ hiểu. Website tự cập nhật theo kênh YouTube của 30s KHÁM PHÁ CÔNG NGHỆ &amp; ĐỜI SỐNG – không cần đăng lại nội dung.</p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="#latest">Khám phá ngay ↓</a>
           <a class="btn btn-secondary" id="youtubeChannelLink" href="https://www.youtube.com/@30sKhamPhaCuocSong" target="_blank" rel="noopener">Theo dõi YouTube ↗</a>
         </div>
-        <div class="hero-meta" id="heroMeta">
-          <span><b id="videoCount">0</b> video</span>
-          <span class="dot">•</span>
+        <div class="hero-meta">
+          <span><strong id="videoCount">0</strong> video</span>
+          <span>•</span>
           <span>Tự động đồng bộ</span>
-          <span class="dot">•</span>
+          <span>•</span>
           <span>Không quảng cáo chen ngang</span>
         </div>
       </div>
-
-      <div class="featured-shell">
-        <div class="featured-label">Video nổi bật</div>
-        <div class="featured-card" id="featuredVideo" aria-live="polite">
-          <div class="skeleton featured-skeleton"></div>
-        </div>
+      <div class="featured-wrap">
+        <span class="featured-label">Video nổi bật</span>
+        <article class="featured-card" id="featuredVideo"></article>
       </div>
     </section>
 
-    <section class="category-bar" id="categories" aria-label="Danh mục">
-      <div class="container category-inner">
+    <section class="category-bar" id="categories" aria-label="Danh mục video">
+      <div class="container category-scroll">
         <span class="category-caption">Khám phá theo chủ đề</span>
         <div class="chips" id="categoryChips"></div>
       </div>
@@ -101,22 +96,21 @@
     <section class="section container" id="latest">
       <div class="section-head">
         <div>
-          <p class="eyebrow">MỚI CẬP NHẬT</p>
-          <h2>Video mới nhất</h2>
+          <p class="eyebrow">VIDEO MỚI NHẤT</p>
+          <h2>Vừa được khám phá</h2>
         </div>
-        <div class="section-tools">
-          <span class="sync-status" id="syncStatus">Đang tải dữ liệu…</span>
-          <button class="view-toggle active" id="gridView" type="button" aria-label="Hiển thị dạng lưới">▦</button>
-          <button class="view-toggle" id="listView" type="button" aria-label="Hiển thị dạng danh sách">☷</button>
+        <div class="view-toggle" aria-label="Kiểu hiển thị">
+          <button class="active" id="gridView" type="button" aria-label="Dạng lưới">▦</button>
+          <button id="listView" type="button" aria-label="Dạng danh sách">☷</button>
         </div>
       </div>
 
       <div class="active-filter" id="activeFilter" hidden>
         <span id="activeFilterText"></span>
-        <button id="clearFilter" type="button">Xóa lọc ×</button>
+        <button id="clearFilter" type="button">Xóa bộ lọc</button>
       </div>
 
-      <div class="video-grid" id="latestGrid" aria-live="polite"></div>
+      <div class="video-grid" id="latestGrid"></div>
 
       <div class="empty-state" id="emptyState" hidden>
         <div class="empty-icon">▶</div>
@@ -175,7 +169,7 @@
     </div>
     <div class="container footer-bottom">
       <p class="affiliate-disclosure" id="affiliateDisclosure"></p>
-      <p>© <span id="year"></span> 30s KHÁM PHÁ CÔNG NGHỆ &amp; ĐỜI SỐNG · v<span id="siteVersion">0.11.3</span></p>
+      <p>© <span id="year"></span> 30s KHÁM PHÁ CÔNG NGHỆ &amp; ĐỜI SỐNG · v<span id="siteVersion">0.13.0</span></p>
     </div>
   </footer>
 
@@ -195,6 +189,7 @@
           <a id="modalYoutubeLink" target="_blank" rel="noopener">YouTube ↗</a>
         </div>
       </div>
+      <aside class="video-affiliate" id="modalAffiliate" hidden aria-label="Sản phẩm liên quan"></aside>
     </div>
   </dialog>
 
@@ -205,5 +200,6 @@
   </noscript>
 
   <script type="module" src="assets/js/app.js"></script>
+  <script type="module" src="assets/js/video-affiliate-v0.13.0.js?v=0.13.0"></script>
 </body>
 </html>
