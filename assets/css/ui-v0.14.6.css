@@ -1,0 +1,412 @@
+@import url("ui-v0.14.4.css?v=0.14.4");
+
+/* 30s KHÁM PHÁ — unified button/control system v0.14.6 */
+:root {
+  --control-h-lg: 46px;
+  --control-h-md: 40px;
+  --control-h-sm: 34px;
+  --control-radius: 999px;
+  --control-border: rgba(78, 58, 39, .14);
+  --control-border-hover: rgba(78, 58, 39, .24);
+  --control-surface: rgba(255, 253, 249, .94);
+  --control-shadow: 0 7px 18px rgba(58, 42, 29, .055);
+  --control-shadow-hover: 0 11px 24px rgba(58, 42, 29, .10);
+  --control-focus: 0 0 0 3px rgba(71, 135, 132, .22);
+}
+
+/* Shared behavior for every button-like control. */
+.btn,
+.section-link,
+.search-clear-btn,
+.active-filter #clearFilter,
+.share-btn,
+.modal-actions a,
+.header-social-icon,
+.icon-btn,
+.hero-social-btn,
+.view-toggle button,
+.modal-close,
+.back-top,
+.chip {
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  transition:
+    color .18s ease,
+    background-color .18s ease,
+    border-color .18s ease,
+    box-shadow .18s ease,
+    transform .18s ease;
+}
+
+.btn:focus-visible,
+.section-link:focus-visible,
+.search-clear-btn:focus-visible,
+.active-filter #clearFilter:focus-visible,
+.share-btn:focus-visible,
+.modal-actions a:focus-visible,
+.header-social-icon:focus-visible,
+.icon-btn:focus-visible,
+.hero-social-btn:focus-visible,
+.view-toggle button:focus-visible,
+.modal-close:focus-visible,
+.back-top:focus-visible,
+.chip:focus-visible {
+  outline: 0;
+  box-shadow: var(--control-focus);
+}
+
+/* Primary and secondary text buttons share one geometry. */
+.btn {
+  min-height: var(--control-h-lg);
+  padding: 0 18px;
+  border-radius: var(--control-radius);
+  border-width: 1px;
+  border-style: solid;
+  font-size: .88rem;
+  font-weight: 750;
+  line-height: 1;
+  letter-spacing: -.012em;
+  box-shadow: none;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  color: #fff;
+  background: var(--brand-red, #A94335);
+  border-color: var(--brand-red, #A94335);
+  box-shadow: 0 9px 22px rgba(169, 67, 53, .18);
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background: var(--brand-red-dark, #87352B);
+  border-color: var(--brand-red-dark, #87352B);
+  box-shadow: 0 12px 28px rgba(169, 67, 53, .23);
+}
+
+.btn-secondary {
+  color: var(--ink, #252525);
+  background: var(--control-surface);
+  border-color: var(--control-border);
+  box-shadow: var(--control-shadow);
+}
+
+.btn-secondary:hover {
+  color: var(--brand-red, #A94335);
+  background: #fffdf9;
+  border-color: rgba(169, 67, 53, .24);
+  box-shadow: var(--control-shadow-hover);
+}
+
+.btn-youtube {
+  color: #fff;
+  background: var(--ink, #252525);
+  border-color: var(--ink, #252525);
+  box-shadow: 0 9px 22px rgba(37, 37, 37, .16);
+}
+
+.btn-youtube:hover {
+  color: #fff;
+  background: #111;
+  border-color: #111;
+  box-shadow: 0 12px 28px rgba(37, 37, 37, .22);
+}
+
+/* Header/hero icon controls: always circular, same visual weight. */
+.header-social-icon,
+.icon-btn {
+  width: var(--control-h-md);
+  height: var(--control-h-md);
+  min-width: var(--control-h-md);
+  min-height: var(--control-h-md);
+  border-radius: 50%;
+  border: 1px solid var(--control-border);
+  background: var(--control-surface);
+  box-shadow: var(--control-shadow);
+}
+
+.header-social-icon:hover,
+.icon-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--control-border-hover);
+  box-shadow: var(--control-shadow-hover);
+}
+
+.hero-actions .hero-social-btn {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+/* Category chips: same pill language, quieter than CTA buttons. */
+.chip {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  border-radius: var(--control-radius);
+  border: 1px solid var(--control-border);
+  background: var(--control-surface);
+  color: #4e4943;
+  font-size: .76rem;
+  font-weight: 750;
+  line-height: 1;
+  box-shadow: 0 4px 12px rgba(58, 42, 29, .035);
+}
+
+.chip:hover {
+  color: var(--brand-red, #A94335);
+  background: rgba(169, 67, 53, .055);
+  border-color: rgba(169, 67, 53, .18);
+  transform: translateY(-1px);
+}
+
+.chip.active,
+.chip.active:hover {
+  color: #fff;
+  background: var(--brand-red, #A94335);
+  border-color: var(--brand-red, #A94335);
+  box-shadow: 0 7px 18px rgba(169, 67, 53, .16);
+}
+
+/* Section action — fixes the browser-default rectangular “Xem tất cả”. */
+.section-link {
+  appearance: none;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  border: 1px solid rgba(71, 135, 132, .24);
+  border-radius: var(--control-radius);
+  background: rgba(255, 253, 249, .92);
+  color: var(--brand-teal-dark, #326C69);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: .76rem;
+  font-weight: 800;
+  line-height: 1;
+  box-shadow: 0 5px 14px rgba(58, 42, 29, .04);
+}
+
+.section-link:hover {
+  color: #fff;
+  background: var(--brand-teal, #478784);
+  border-color: var(--brand-teal, #478784);
+  box-shadow: 0 8px 18px rgba(71, 135, 132, .18);
+  transform: translateY(-1px);
+}
+
+/* Search clear and active-filter clear are one small-pill family. */
+.search-clear-btn,
+.active-filter #clearFilter {
+  appearance: none;
+  min-height: var(--control-h-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  border: 1px solid rgba(169, 67, 53, .14);
+  border-radius: var(--control-radius);
+  background: rgba(169, 67, 53, .07);
+  color: var(--brand-red, #A94335);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: .72rem;
+  font-weight: 800;
+  line-height: 1;
+  box-shadow: none;
+}
+
+.search-clear-btn:hover,
+.active-filter #clearFilter:hover {
+  color: #fff;
+  background: var(--brand-red, #A94335);
+  border-color: var(--brand-red, #A94335);
+  transform: translateY(-1px);
+}
+
+/* Grid/List is a true segmented pill control. */
+.view-toggle {
+  width: auto;
+  height: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--control-border);
+  border-radius: var(--control-radius);
+  background: var(--control-surface);
+  box-shadow: var(--control-shadow);
+}
+
+.view-toggle button {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #746f67;
+  cursor: pointer;
+}
+
+.view-toggle button:hover {
+  color: var(--brand-red, #A94335);
+  background: rgba(169, 67, 53, .07);
+}
+
+.view-toggle button.active,
+.view-toggle button.active:hover {
+  color: #fff;
+  background: var(--ink, #252525);
+  box-shadow: 0 5px 12px rgba(37, 37, 37, .16);
+}
+
+/* Modal actions use the same pill proportions on the dark surface. */
+.modal-actions a,
+.share-btn {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  border-radius: var(--control-radius);
+  font-size: .74rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.modal-actions a {
+  color: #fff;
+  border: 1px solid var(--brand-red, #A94335);
+  background: var(--brand-red, #A94335);
+}
+
+.modal-actions a:hover {
+  background: var(--brand-red-dark, #87352B);
+  border-color: var(--brand-red-dark, #87352B);
+  transform: translateY(-1px);
+}
+
+.share-btn {
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, .18);
+  background: rgba(255, 255, 255, .075);
+  cursor: pointer;
+}
+
+.share-btn:hover {
+  border-color: rgba(255, 255, 255, .30);
+  background: rgba(255, 255, 255, .13);
+  transform: translateY(-1px);
+}
+
+/* Round utility controls. */
+.modal-close,
+.back-top {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+}
+
+.modal-close {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, .16);
+  background: rgba(0, 0, 0, .68);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .20);
+}
+
+.modal-close:hover {
+  background: rgba(169, 67, 53, .94);
+  border-color: rgba(255, 255, 255, .22);
+  transform: rotate(3deg) scale(1.03);
+}
+
+.back-top {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--control-border);
+  background: rgba(255, 253, 249, .96);
+  color: var(--ink, #252525);
+  box-shadow: var(--control-shadow-hover);
+}
+
+.back-top:hover {
+  color: #fff;
+  background: var(--brand-red, #A94335);
+  border-color: var(--brand-red, #A94335);
+}
+
+/* Affiliate rows stay card-like; only their CTA label becomes a system pill. */
+.video-affiliate-links b,
+.product-card-footer span:last-child {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 0 11px;
+  border-radius: var(--control-radius);
+  background: rgba(169, 67, 53, .09);
+  color: var(--brand-red, #A94335);
+  font-size: .72rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.video-affiliate-links a:hover b,
+.product-card:hover .product-card-footer span:last-child {
+  color: #fff;
+  background: var(--brand-red, #A94335);
+}
+
+@media (max-width: 680px) {
+  .btn {
+    min-height: 46px;
+  }
+
+  .section-link {
+    min-height: 36px;
+    padding-inline: 13px;
+  }
+
+  .search-clear-btn,
+  .active-filter #clearFilter {
+    min-height: 34px;
+  }
+
+  .modal-actions a,
+  .share-btn {
+    min-height: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .section-link,
+  .search-clear-btn,
+  .active-filter #clearFilter,
+  .share-btn,
+  .modal-actions a,
+  .header-social-icon,
+  .icon-btn,
+  .hero-social-btn,
+  .view-toggle button,
+  .modal-close,
+  .back-top,
+  .chip {
+    transition: none;
+  }
+}
