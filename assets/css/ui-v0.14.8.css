@@ -1,0 +1,369 @@
+@import url("ui-v0.14.7.css?v=0.14.7");
+
+/* 30s KHÁM PHÁ — mobile-first homepage repair v0.14.8
+   Dedicated mobile composition instead of shrinking the desktop grid. */
+
+@media (max-width: 900px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 34px;
+    min-height: 0;
+    padding-block: 48px 56px;
+  }
+
+  .hero-copy {
+    order: 1;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+
+  .featured-wrap {
+    order: 2;
+    width: 100%;
+    max-width: 760px;
+    min-width: 0;
+    margin-inline: auto;
+  }
+
+  .featured-card {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 680px) {
+  :root {
+    --mobile-gutter: 18px;
+    --header-h: 76px;
+  }
+
+  .container {
+    width: calc(100% - (var(--mobile-gutter) * 2));
+    max-width: none;
+  }
+
+  /* Header: brand stays readable, actions stay compact. */
+  .header-inner {
+    min-height: var(--header-h);
+    height: var(--header-h);
+    gap: 10px;
+  }
+
+  .site-header .brand {
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: 9px;
+  }
+
+  .site-header .brand-text {
+    min-width: 0;
+    white-space: normal;
+  }
+
+  .site-header .brand-text strong {
+    display: block;
+    max-width: 190px;
+    font-size: .78rem;
+    line-height: 1.18;
+    letter-spacing: -.018em;
+  }
+
+  .header-actions {
+    flex: 0 0 auto;
+    gap: 8px;
+    margin-left: auto;
+  }
+
+  .header-social-icon {
+    display: none !important;
+  }
+
+  .menu-toggle,
+  .search-toggle-last {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Hero: copy first, featured video second. */
+  .hero {
+    gap: 28px;
+    padding-block: 34px 42px;
+  }
+
+  .hero-kicker {
+    gap: 9px;
+  }
+
+  .hero-kicker::before {
+    width: 28px;
+  }
+
+  .hero .eyebrow {
+    font-size: .68rem;
+    line-height: 1.35;
+    letter-spacing: .12em;
+  }
+
+  .hero h1 {
+    width: 100%;
+    max-width: 100%;
+    margin: 17px 0 16px;
+    font-size: clamp(2.48rem, 11.3vw, 3.05rem);
+    line-height: .99;
+    letter-spacing: -.052em;
+    overflow-wrap: normal;
+    word-break: normal;
+    text-wrap: balance;
+  }
+
+  .hero h1 em {
+    display: block;
+    width: 100%;
+    margin-top: 2px;
+  }
+
+  .hero h1 em::after {
+    width: 44px;
+    height: 4px;
+  }
+
+  .hero-copy > p {
+    width: 100%;
+    max-width: 34rem;
+    font-size: .93rem;
+    line-height: 1.62;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 23px;
+  }
+
+  .hero-actions .btn-primary,
+  .hero-actions #youtubeChannelLink {
+    flex: 0 0 100%;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 48px;
+    justify-content: center;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .hero-actions .hero-social-btn {
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Featured card: never wider than viewport, no decorative overflow. */
+  .featured-wrap {
+    width: 100%;
+    max-width: 100%;
+    margin: 2px 0 0;
+  }
+
+  .featured-wrap::before {
+    display: none;
+  }
+
+  .featured-label {
+    display: none;
+  }
+
+  .featured-card {
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 16 / 10;
+    border-radius: 18px;
+    box-shadow: 0 16px 38px rgba(48, 37, 28, .14);
+  }
+
+  .featured-card:hover {
+    transform: none;
+  }
+
+  .featured-card .video-copy {
+    padding: 88px 16px 16px;
+  }
+
+  .featured-card .video-copy h3 {
+    max-width: 100%;
+    margin-top: 6px;
+    font-size: 1.04rem;
+    line-height: 1.32;
+    -webkit-line-clamp: 2;
+  }
+
+  .featured-card .video-category {
+    font-size: .66rem;
+  }
+
+  .featured-card .meta-row {
+    margin-top: 6px;
+    font-size: .64rem;
+  }
+
+  .featured-card .play-button {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* Category navigation should scroll naturally on mobile, not consume viewport as sticky UI. */
+  .category-bar {
+    position: relative;
+    top: auto;
+  }
+
+  .category-scroll {
+    min-height: 0;
+    display: block;
+    padding-block: 14px 12px;
+  }
+
+  .category-caption {
+    display: block;
+    margin-bottom: 7px;
+    font-size: .72rem;
+  }
+
+  .chips {
+    width: 100%;
+    padding-block: 2px 4px;
+  }
+
+  /* Content cards and tools. */
+  .section {
+    padding-block: 50px 26px;
+  }
+
+  .section-head {
+    align-items: flex-end;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .section-head h2 {
+    font-size: clamp(1.65rem, 7.4vw, 2.15rem);
+  }
+
+  .view-toggle {
+    flex: 0 0 auto;
+  }
+
+  .video-grid,
+  .affiliate-products {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .video-grid.list-view .video-card {
+    grid-template-columns: 118px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .video-grid.list-view .video-copy h3 {
+    font-size: .9rem;
+  }
+
+  .active-filter {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .subscribe-section {
+    padding-block: 48px;
+  }
+
+  .subscribe-card {
+    padding: 28px 20px;
+    border-radius: 20px;
+  }
+
+  /* Modal must fit real phone viewports. */
+  .video-modal {
+    width: 100%;
+    max-width: 100%;
+    padding: 8px;
+  }
+
+  .modal-card {
+    width: min(100%, calc(100vw - 16px));
+    max-width: none;
+    max-height: calc(100dvh - 16px);
+    border-radius: 18px;
+  }
+
+  .modal-info {
+    padding-inline: 16px;
+  }
+
+  .video-affiliate {
+    margin-inline: 12px;
+  }
+}
+
+@media (max-width: 430px) {
+  :root {
+    --mobile-gutter: 16px;
+  }
+
+  .site-header .brand-text strong {
+    display: block;
+    max-width: 166px;
+    font-size: .73rem;
+  }
+
+  .hero {
+    padding-top: 30px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.32rem, 11.1vw, 2.82rem);
+  }
+
+  .hero-copy > p {
+    font-size: .9rem;
+  }
+
+  .hero-actions .btn-primary,
+  .hero-actions #youtubeChannelLink {
+    padding-inline: 15px;
+  }
+
+  .featured-card {
+    aspect-ratio: 16 / 10.3;
+  }
+
+  .section-head {
+    align-items: flex-start;
+  }
+}
+
+@supports not (overflow: clip) {
+  @media (max-width: 900px) {
+    html,
+    body {
+      overflow-x: hidden;
+    }
+  }
+}
