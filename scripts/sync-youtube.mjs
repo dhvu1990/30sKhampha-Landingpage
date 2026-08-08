@@ -24,11 +24,7 @@ async function youtube(endpoint, params) {
   if (!response.ok) {
     const body = await response.text();
     let detail = null;
-    try {
-      detail = JSON.parse(body);
-    } catch {
-      // Keep raw response body in the message when Google does not return JSON.
-    }
+    try { detail = JSON.parse(body); } catch {}
     const error = new Error(`YouTube API ${response.status}: ${body}`);
     error.status = response.status;
     error.reason = detail?.error?.errors?.[0]?.reason || null;
@@ -70,16 +66,19 @@ function slugify(value = '') {
 }
 
 function normalized(value = '') {
-  return slugify(value).replace(/-/g, ' ');
+  return slugify(value).replace(/-/g, ' ').trim();
+}
+
+const categoryNameMap = new Map();
+for (const category of categoryConfig) {
+  for (const candidate of [category.title, ...(category.aliases || [])]) {
+    const key = normalized(candidate);
+    if (key) categoryNameMap.set(key, category.slug);
+  }
 }
 
 function resolveCategory(playlistTitle) {
-  const name = normalized(playlistTitle);
-  for (const category of categoryConfig) {
-    const candidates = [category.title, ...(category.aliases || [])].map(normalized);
-    if (candidates.some(alias => alias && (name.includes(alias) || alias.includes(name)))) return category.slug;
-  }
-  return slugify(playlistTitle) || 'khac';
+  return categoryNameMap.get(normalized(playlistTitle)) || null;
 }
 
 function parseDuration(iso = '') {
@@ -88,8 +87,7 @@ function parseDuration(iso = '') {
   const h = Number(match[1] || 0);
   const m = Number(match[2] || 0);
   const s = Number(match[3] || 0);
-  const totalMinutes = h * 60 + m;
-  return `${totalMinutes}:${String(s).padStart(2, '0')}`;
+  return `${h * 60 + m}:${String(s).padStart(2, '0')}`;
 }
 
 function chunk(array, size) {
@@ -100,9 +98,7 @@ function chunk(array, size) {
 
 function stable(value) {
   if (Array.isArray(value)) return value.map(stable);
-  if (value && typeof value === 'object') {
-    return Object.fromEntries(Object.keys(value).sort().map(key => [key, stable(value[key])]));
-  }
+  if (value && typeof value === 'object') return Object.fromEntries(Object.keys(value).sort().map(key => [key, stable(value[key])]));
   return value;
 }
 
@@ -111,17 +107,10 @@ function sameData(a, b) {
 }
 
 async function readJSON(filePath, fallback) {
-  try {
-    return JSON.parse(await fs.readFile(filePath, 'utf8'));
-  } catch {
-    return fallback;
-  }
+  try { return JSON.parse(await fs.readFile(filePath, 'utf8')); } catch { return fallback; }
 }
 
-const channelData = await youtube('channels', {
-  part: 'id,snippet,contentDetails,statistics',
-  forHandle: handle
-});
+const channelData = await youtube('channels', { part: 'id,snippet,contentDetails,statistics', forHandle: handle });
 const channel = channelData.items?.[0];
 if (!channel) throw new Error(`Không tìm thấy channel theo handle ${handle}.`);
 
@@ -129,31 +118,27 @@ const channelId = channel.id;
 const uploadsPlaylist = channel.contentDetails?.relatedPlaylists?.uploads || '';
 let uploadItems = [];
 if (uploadsPlaylist) {
-  uploadItems = await paginatePlaylistItems({
-    part: 'snippet,contentDetails,status',
-    playlistId: uploadsPlaylist
-  }, 250, `uploads playlist của ${handle}`);
+  uploadItems = await paginatePlaylistItems({ part: 'snippet,contentDetails,status', playlistId: uploadsPlaylist }, 250, `uploads playlist của ${handle}`);
 } else {
   console.warn(`Channel ${handle} chưa có uploads playlist khả dụng. Tiếp tục với 0 video.`);
 }
 
-const playlistResources = await paginate('playlists', {
-  part: 'id,snippet,contentDetails,status',
-  channelId
-}, 250);
-
+const playlistResources = await paginate('playlists', { part: 'id,snippet,contentDetails,status', channelId }, 250);
 const categoryMembership = new Map();
-const generatedCategories = [];
+const recognizedPlaylists = [];
+const ignoredPlaylists = [];
+
 for (const playlist of playlistResources) {
-  const playlistTitle = playlist.snippet?.title || 'Khám phá';
+  const playlistTitle = playlist.snippet?.title || '';
   const slug = resolveCategory(playlistTitle);
-  if (!categoryConfig.some(c => c.slug === slug) && !generatedCategories.some(c => c.slug === slug)) {
-    generatedCategories.push({ slug, title: playlistTitle, emoji: '✨', aliases: [] });
+  if (!slug) {
+    ignoredPlaylists.push(playlistTitle || playlist.id);
+    console.warn(`Playlist ngoài taxonomy, bỏ qua: "${playlistTitle || playlist.id}".`);
+    continue;
   }
-  const items = await paginatePlaylistItems({
-    part: 'contentDetails,status',
-    playlistId: playlist.id
-  }, 250, `playlist "${playlistTitle}"`);
+
+  recognizedPlaylists.push({ id: playlist.id, title: playlistTitle, slug });
+  const items = await paginatePlaylistItems({ part: 'contentDetails,status', playlistId: playlist.id }, 250, `playlist "${playlistTitle}"`);
   for (const item of items) {
     const videoId = item.contentDetails?.videoId;
     if (!videoId) continue;
@@ -166,37 +151,42 @@ for (const playlist of playlistResources) {
 const uploadIds = uploadItems.map(item => item.contentDetails?.videoId).filter(Boolean);
 const detailMap = new Map();
 for (const ids of chunk(uploadIds, 50)) {
-  const data = await youtube('videos', {
-    part: 'id,snippet,contentDetails,statistics,status',
-    id: ids.join(',')
-  });
+  const data = await youtube('videos', { part: 'id,snippet,contentDetails,statistics,status', id: ids.join(',') });
   for (const video of data.items || []) detailMap.set(video.id, video);
 }
 
-const fallbackCategory = 'top-su-that-nhanh';
-const videos = uploadIds.map(id => detailMap.get(id)).filter(Boolean).filter(video => video.status?.privacyStatus === 'public').map(video => {
-  const categories = [...(categoryMembership.get(video.id) || [])];
-  const primaryCategory = categories[0] || fallbackCategory;
-  const thumbs = video.snippet?.thumbnails || {};
-  const thumbnail = thumbs.maxres?.url || thumbs.standard?.url || thumbs.high?.url || thumbs.medium?.url || thumbs.default?.url || '';
-  return {
-    id: video.id,
-    title: video.snippet?.title || '',
-    description: video.snippet?.description || '',
-    publishedAt: video.snippet?.publishedAt || null,
-    thumbnail,
-    duration: parseDuration(video.contentDetails?.duration || ''),
-    viewCount: Number(video.statistics?.viewCount || 0),
-    likeCount: video.statistics?.likeCount != null ? Number(video.statistics.likeCount) : null,
-    categories: categories.length ? categories : [primaryCategory],
-    primaryCategory,
-    url: `https://www.youtube.com/watch?v=${video.id}`
-  };
-}).sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+const videos = uploadIds
+  .map(id => detailMap.get(id))
+  .filter(Boolean)
+  .filter(video => video.status?.privacyStatus === 'public')
+  .map(video => {
+    const categories = [...(categoryMembership.get(video.id) || [])];
+    if (!categories.length) {
+      console.warn(`Video public chưa thuộc 1 trong 8 playlist chuẩn, bỏ qua website: ${video.id} — ${video.snippet?.title || ''}`);
+      return null;
+    }
+    const primaryCategory = categories[0];
+    const thumbs = video.snippet?.thumbnails || {};
+    const thumbnail = thumbs.maxres?.url || thumbs.standard?.url || thumbs.high?.url || thumbs.medium?.url || thumbs.default?.url || '';
+    return {
+      id: video.id,
+      title: video.snippet?.title || '',
+      description: video.snippet?.description || '',
+      publishedAt: video.snippet?.publishedAt || null,
+      thumbnail,
+      duration: parseDuration(video.contentDetails?.duration || ''),
+      viewCount: Number(video.statistics?.viewCount || 0),
+      likeCount: video.statistics?.likeCount != null ? Number(video.statistics.likeCount) : null,
+      categories,
+      primaryCategory,
+      url: `https://www.youtube.com/watch?v=${video.id}`
+    };
+  })
+  .filter(Boolean)
+  .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
 
 const videosPath = path.join(root, 'data/videos.json');
 const channelPath = path.join(root, 'data/channel.json');
-const categoriesPath = path.join(root, 'data/categories.json');
 const previousVideos = await readJSON(videosPath, { syncedAt: null, channelId: null, videos: [] });
 const previousChannel = await readJSON(channelPath, {});
 
@@ -207,31 +197,25 @@ const nextChannelCore = {
   handle,
   thumbnail: channel.snippet?.thumbnails?.high?.url || channel.snippet?.thumbnails?.default?.url || '',
   subscriberCount: channel.statistics?.hiddenSubscriberCount ? null : Number(channel.statistics?.subscriberCount || 0),
-  videoCount: Number(channel.statistics?.videoCount || videos.length),
+  videoCount: Number(channel.statistics?.videoCount || 0),
   viewCount: Number(channel.statistics?.viewCount || 0)
 };
 
 const previousVideosCore = { channelId: previousVideos.channelId ?? null, videos: previousVideos.videos || [] };
 const { syncedAt: _previousChannelSyncedAt, ...previousChannelCore } = previousChannel;
-const nextCategories = generatedCategories.length ? [...categoryConfig, ...generatedCategories] : categoryConfig;
 const videosChanged = !sameData(previousVideosCore, nextVideosCore);
 const channelChanged = !sameData(previousChannelCore, nextChannelCore);
-const categoriesChanged = !sameData(categoryConfig, nextCategories);
 
-if (!videosChanged && !channelChanged && !categoriesChanged) {
+console.log(`Taxonomy: ${recognizedPlaylists.length}/8 playlist chuẩn được nhận diện.`);
+if (ignoredPlaylists.length) console.warn(`Playlist ngoài taxonomy: ${ignoredPlaylists.join(' | ')}`);
+
+if (!videosChanged && !channelChanged) {
   console.log(`Không có thay đổi YouTube cho ${channel.snippet?.title || handle}. Không ghi lại JSON.`);
   process.exit(0);
 }
 
 const syncedAt = new Date().toISOString();
-if (videosChanged) {
-  await fs.writeFile(videosPath, JSON.stringify({ syncedAt, ...nextVideosCore }, null, 2) + '\n');
-}
-if (channelChanged || videosChanged) {
-  await fs.writeFile(channelPath, JSON.stringify({ syncedAt, ...nextChannelCore }, null, 2) + '\n');
-}
-if (categoriesChanged) {
-  await fs.writeFile(categoriesPath, JSON.stringify(nextCategories, null, 2) + '\n');
-}
+if (videosChanged) await fs.writeFile(videosPath, JSON.stringify({ syncedAt, ...nextVideosCore }, null, 2) + '\n');
+if (channelChanged || videosChanged) await fs.writeFile(channelPath, JSON.stringify({ syncedAt, ...nextChannelCore }, null, 2) + '\n');
 
-console.log(`Đồng bộ xong ${videos.length} video từ ${channel.snippet?.title || handle}. Dữ liệu đã thay đổi.`);
+console.log(`Đồng bộ xong ${videos.length} video hợp lệ từ ${channel.snippet?.title || handle}. Dữ liệu đã thay đổi.`);
