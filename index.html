@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/brand-v0.11.3.css?v=0.11.3">
   <link rel="stylesheet" href="assets/css/video-affiliate-v0.13.0.css?v=0.13.0">
-  <link rel="stylesheet" href="assets/css/ui-v0.13.3.css?v=0.13.3">
+  <link rel="stylesheet" href="assets/css/ui-v0.13.4.css?v=0.13.4">
 </head>
 <body>
   <a class="skip-link" href="#content">Bỏ qua đến nội dung</a>
@@ -39,7 +39,6 @@
       </nav>
 
       <div class="header-actions">
-        <button class="icon-btn" id="searchToggle" type="button" aria-label="Mở tìm kiếm" aria-expanded="false">⌕</button>
         <a class="header-social-icon facebook" href="https://www.facebook.com/30skhampha" target="_blank" rel="noopener" aria-label="Facebook 30s Khám Phá" title="Facebook">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.6 22v-9h3l.45-3.5H13.6V7.27c0-1.01.28-1.7 1.73-1.7H17.2V2.44c-.32-.04-1.43-.14-2.72-.14-2.69 0-4.54 1.64-4.54 4.66V9.5H6.9V13h3.04v9h3.66Z"/></svg>
         </a>
@@ -49,14 +48,22 @@
         <a class="header-social-icon youtube" id="headerYoutube" href="https://www.youtube.com/@30sKhamPhaCuocSong" target="_blank" rel="noopener" aria-label="YouTube 30s Khám Phá" title="YouTube">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.11-2.12C19.53 3.58 12 3.58 12 3.58s-7.53 0-9.39.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.11 2.12c1.86.5 9.39.5 9.39.5s7.53 0 9.39-.5a3 3 0 0 0 2.11-2.12A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.24 3.6L9.6 15.6Z"/></svg>
         </a>
+        <button class="icon-btn search-toggle-last" id="searchToggle" type="button" aria-label="Mở tìm kiếm" aria-expanded="false" title="Tìm kiếm">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="m21 21-4.35-4.35M10.8 18a7.2 7.2 0 1 1 0-14.4 7.2 7.2 0 0 1 0 14.4Z"/></svg>
+        </button>
         <button class="icon-btn menu-toggle" id="menuToggle" type="button" aria-label="Mở menu" aria-expanded="false">☰</button>
       </div>
     </div>
 
     <div class="search-panel" id="searchPanel" hidden>
       <div class="container search-inner">
-        <input id="searchInput" type="search" placeholder="Tìm video..." autocomplete="off" aria-label="Tìm video">
-        <button id="searchClear" type="button">Xóa</button>
+        <div class="search-field">
+          <span class="search-field-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="m21 21-4.35-4.35M10.8 18a7.2 7.2 0 1 1 0-14.4 7.2 7.2 0 0 1 0 14.4Z"/></svg>
+          </span>
+          <input id="searchInput" type="search" placeholder="Tìm video theo tiêu đề hoặc nội dung..." autocomplete="off" aria-label="Tìm video">
+          <button class="search-clear-btn" id="searchClear" type="button">Xóa</button>
+        </div>
       </div>
     </div>
 
@@ -174,7 +181,7 @@
     </div>
     <div class="container footer-bottom">
       <p class="affiliate-disclosure" id="affiliateDisclosure"></p>
-      <p>© <span id="year"></span> 30s KHÁM PHÁ CÔNG NGHỆ &amp; ĐỜI SỐNG · v<span id="siteVersion">0.13.3</span></p>
+      <p>© <span id="year"></span> 30s KHÁM PHÁ CÔNG NGHỆ &amp; ĐỜI SỐNG · v<span id="siteVersion">0.13.4</span></p>
     </div>
   </footer>
 
