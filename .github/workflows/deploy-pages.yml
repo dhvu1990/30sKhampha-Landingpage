@@ -28,7 +28,7 @@ jobs:
       - name: Prepare static site artifact
         run: |
           mkdir -p _site
-          cp index.html manifest.webmanifest robots.txt _site/
+          cp index.html manifest.webmanifest robots.txt sitemap.xml _site/
           cp -R assets config data _site/
           touch _site/.nojekyll
 
