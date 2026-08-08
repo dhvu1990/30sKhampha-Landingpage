@@ -1,0 +1,57 @@
+@import url("ui-v0.14.6.css?v=0.14.6");
+
+/* 30s KHÁM PHÁ — featured video readability hotfix v0.14.7 */
+.featured-card .video-copy {
+  z-index: 3;
+  padding: 124px 26px 24px;
+  background: linear-gradient(
+    to top,
+    rgba(10, 12, 14, .96) 0%,
+    rgba(10, 12, 14, .82) 34%,
+    rgba(10, 12, 14, .48) 55%,
+    rgba(10, 12, 14, .12) 76%,
+    transparent 100%
+  );
+}
+
+.featured-card .video-copy h3 {
+  color: #fff;
+  max-width: 88%;
+  margin-top: 8px;
+  font-size: clamp(1.15rem, 1.7vw, 1.48rem);
+  font-weight: 800;
+  line-height: 1.36;
+  letter-spacing: -.025em;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, .58);
+  -webkit-line-clamp: 2;
+}
+
+.featured-card .video-category {
+  color: #8fd0cc;
+  text-shadow: 0 1px 9px rgba(0, 0, 0, .55);
+}
+
+.featured-card .meta-row {
+  color: rgba(255, 255, 255, .84);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, .55);
+}
+
+.featured-card .play-button {
+  z-index: 4;
+}
+
+.featured-label {
+  z-index: 5;
+}
+
+@media (max-width: 680px) {
+  .featured-card .video-copy {
+    padding: 104px 18px 18px;
+  }
+
+  .featured-card .video-copy h3 {
+    max-width: 100%;
+    font-size: clamp(1.02rem, 4.7vw, 1.25rem);
+    line-height: 1.34;
+  }
+}
