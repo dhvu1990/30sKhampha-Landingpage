@@ -94,11 +94,16 @@ function applySiteConfig() {
   const site = state.site;
   document.title = site.siteName || '30s Khám Phá';
   $('#siteVersion').textContent = site.version || '0.7.0';
+
+  const homeLink = $('.site-header .brand');
+  if (homeLink) homeLink.href = './';
+
   const youtube = site.youtubeUrl || '#';
   ['#headerYoutube','#mobileYoutube','#youtubeChannelLink','#emptyYoutube','#subscribeYoutube','#footerYoutube'].forEach(selector => {
     const el = $(selector); if (el) el.href = youtube;
   });
   if (site.social?.facebook) { $('#footerFacebook').href = site.social.facebook; $('#footerFacebook').hidden = false; }
+  if (site.social?.instagram && $('#footerInstagram')) { $('#footerInstagram').href = site.social.instagram; $('#footerInstagram').hidden = false; }
   if (site.social?.tiktok) { $('#footerTiktok').href = site.social.tiktok; $('#footerTiktok').hidden = false; }
 }
 
@@ -319,7 +324,7 @@ function openVideo(id) {
   $('#modalTitle').textContent = video.title || '';
   $('#modalCategory').textContent = `${category.emoji || ''} ${category.title}`;
   $('#modalYoutubeLink').href = video.url || `https://www.youtube.com/watch?v=${encodeURIComponent(video.id)}`;
-  $('#playerWrap').innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(video.id)}?autoplay=1&rel=0" title="${escapeHTML(video.title || 'YouTube video')}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+  $('#playerWrap').innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(video.id)}?autoplay=1&rel=0&playsinline=1&hl=vi&cc_load_policy=0" title="${escapeHTML(video.title || 'YouTube video')}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
   const modal = $('#videoModal');
   modal.showModal();
   document.body.classList.add('modal-open');
