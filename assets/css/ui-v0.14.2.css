@@ -1,0 +1,32 @@
+@import url("ui-v0.14.1.css?v=0.14.1");
+
+.header-social-icon.instagram { color: #C13584; }
+.header-social-icon.instagram:hover {
+  color: #C13584;
+  border-color: rgba(193, 53, 132, .30);
+  background: rgba(193, 53, 132, .075);
+}
+
+.hero-actions {
+  grid-template-columns: max-content max-content 44px 44px 44px;
+}
+
+.hero-instagram {
+  color: #C13584;
+  border-color: rgba(193, 53, 132, .24);
+  background: rgba(255, 253, 249, .96);
+}
+.hero-instagram:hover {
+  color: #fff;
+  border-color: #C13584;
+  background: #C13584;
+}
+
+@media (max-width: 980px) {
+  .header-social-icon.instagram { display: none; }
+}
+
+@media (max-width: 680px) {
+  .hero-actions { display: flex; flex-wrap: wrap; }
+  .hero-actions .hero-social-btn { flex: 0 0 44px; }
+}
