@@ -1,0 +1,53 @@
+@import url("brand-v0.11.2.css?v=0.11.2");
+
+/* 30s KHÁM PHÁ CÔNG NGHỆ & ĐỜI SỐNG — wordmark sizing v0.11.3 */
+.brand {
+  min-width: 0;
+}
+.brand-text {
+  min-width: 0;
+}
+.brand-text strong {
+  font-size: .96rem;
+  letter-spacing: -.03em;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.footer-logo .brand-text strong {
+  font-size: 1rem;
+}
+
+@media (max-width: 1050px) {
+  .brand-text strong {
+    font-size: .86rem;
+  }
+  .header-nav {
+    gap: 18px;
+  }
+}
+
+@media (max-width: 900px) {
+  .brand-text strong {
+    font-size: .8rem;
+  }
+}
+
+@media (max-width: 760px) {
+  .brand-text strong {
+    font-size: .78rem;
+    white-space: normal;
+    max-width: 205px;
+  }
+  .footer-logo .brand-text strong {
+    font-size: .88rem;
+    max-width: 230px;
+  }
+}
+
+@media (max-width: 410px) {
+  .brand-text strong {
+    font-size: .72rem;
+    max-width: 168px;
+  }
+}
