@@ -2,38 +2,48 @@
   {
     "id": "demo-tech",
     "demo": true,
-    "title": "5 công nghệ nhỏ nhưng thay đổi cuộc sống mỗi ngày",
+    "title": "5 công nghệ AI nhỏ nhưng thay đổi cuộc sống mỗi ngày",
     "publishedAt": "2026-08-07T00:00:00Z",
     "duration": "0:30",
     "viewCount": null,
-    "primaryCategory": "cong-nghe-do-hay",
-    "categories": ["cong-nghe-do-hay"]
+    "primaryCategory": "cong-nghe-ai",
+    "categories": ["cong-nghe-ai"]
   },
   {
     "id": "demo-science",
     "demo": true,
-    "title": "Vì sao bầu trời đổi màu lúc hoàng hôn?",
+    "title": "Nếu Mặt Trời biến mất trong 1 giây thì chuyện gì xảy ra?",
     "publishedAt": "2026-08-06T00:00:00Z",
     "duration": "0:28",
     "viewCount": null,
-    "primaryCategory": "khoa-hoc-bi-an",
-    "categories": ["khoa-hoc-bi-an"]
+    "primaryCategory": "khoa-hoc-vu-tru",
+    "categories": ["khoa-hoc-vu-tru"]
+  },
+  {
+    "id": "demo-human",
+    "demo": true,
+    "title": "Vì sao chúng ta hay quên tên người vừa gặp?",
+    "publishedAt": "2026-08-05T00:00:00Z",
+    "duration": "0:29",
+    "viewCount": null,
+    "primaryCategory": "con-nguoi-tam-ly",
+    "categories": ["con-nguoi-tam-ly"]
   },
   {
     "id": "demo-world",
     "demo": true,
-    "title": "Một nơi trên Trái Đất có ngày dài hơn bạn nghĩ",
-    "publishedAt": "2026-08-05T00:00:00Z",
-    "duration": "0:29",
+    "title": "Một phong tục lạ khiến du khách bất ngờ",
+    "publishedAt": "2026-08-04T00:00:00Z",
+    "duration": "0:27",
     "viewCount": null,
-    "primaryCategory": "the-gioi-quanh-ta",
-    "categories": ["the-gioi-quanh-ta"]
+    "primaryCategory": "the-gioi-van-hoa",
+    "categories": ["the-gioi-van-hoa"]
   },
   {
     "id": "demo-nature",
     "demo": true,
-    "title": "Loài vật có khả năng định hướng đáng kinh ngạc",
-    "publishedAt": "2026-08-04T00:00:00Z",
+    "title": "Vì sao mèo có thể tiếp đất rất khéo?",
+    "publishedAt": "2026-08-03T00:00:00Z",
     "duration": "0:27",
     "viewCount": null,
     "primaryCategory": "dong-vat-thien-nhien",
@@ -43,40 +53,30 @@
     "id": "demo-tip",
     "demo": true,
     "title": "Mẹo 30 giây giúp điện thoại gọn gàng hơn",
-    "publishedAt": "2026-08-03T00:00:00Z",
+    "publishedAt": "2026-08-02T00:00:00Z",
     "duration": "0:25",
     "viewCount": null,
-    "primaryCategory": "meo-hay-30s",
-    "categories": ["meo-hay-30s"]
+    "primaryCategory": "meo-song-ky-nang",
+    "categories": ["meo-song-ky-nang"]
   },
   {
     "id": "demo-product",
     "demo": true,
     "title": "Một món đồ nhỏ nhưng cực kỳ tiện dụng",
-    "publishedAt": "2026-08-02T00:00:00Z",
+    "publishedAt": "2026-08-01T00:00:00Z",
     "duration": "0:30",
     "viewCount": null,
-    "primaryCategory": "san-pham-thu-vi",
-    "categories": ["san-pham-thu-vi"]
+    "primaryCategory": "san-pham-do-hay",
+    "categories": ["san-pham-do-hay"]
   },
   {
     "id": "demo-quiz",
     "demo": true,
     "title": "Bạn có tìm ra đáp án trong 10 giây?",
-    "publishedAt": "2026-08-01T00:00:00Z",
+    "publishedAt": "2026-07-31T00:00:00Z",
     "duration": "0:20",
     "viewCount": null,
-    "primaryCategory": "cau-do-thu-thach",
-    "categories": ["cau-do-thu-thach"]
-  },
-  {
-    "id": "demo-fact",
-    "demo": true,
-    "title": "3 sự thật nghe khó tin nhưng hoàn toàn có thật",
-    "publishedAt": "2026-07-31T00:00:00Z",
-    "duration": "0:30",
-    "viewCount": null,
-    "primaryCategory": "top-su-that-nhanh",
-    "categories": ["top-su-that-nhanh"]
+    "primaryCategory": "cau-do-tu-duy",
+    "categories": ["cau-do-tu-duy"]
   }
 ]
