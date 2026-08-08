@@ -1,0 +1,142 @@
+@import url("ui-v0.14.0.css?v=0.14.0");
+
+/* 30s KHÁM PHÁ — UI controls hotfix v0.14.1 */
+
+/* The legacy main.css treated .view-toggle as one button. In current HTML it is
+   a group containing two buttons, so reset the container and style children. */
+.view-toggle {
+  width: auto;
+  height: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid rgba(78, 58, 39, .12);
+  border-radius: 12px;
+  background: rgba(255, 253, 249, .92);
+  box-shadow: 0 7px 20px rgba(58, 42, 29, .05);
+  overflow: visible;
+}
+
+.view-toggle button {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #746f67;
+  cursor: pointer;
+  transition: background .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+
+.view-toggle button svg {
+  width: 17px;
+  height: 17px;
+  display: block;
+}
+
+.view-toggle button:hover {
+  color: var(--brand-red, #A94335);
+  background: rgba(169, 67, 53, .07);
+}
+
+.view-toggle button.active,
+.view-toggle button.active:hover {
+  color: #fff;
+  background: var(--ink, #252525);
+  box-shadow: 0 5px 12px rgba(37, 37, 37, .16);
+}
+
+.view-toggle button:focus-visible {
+  outline: 3px solid rgba(71, 135, 132, .24);
+  outline-offset: 2px;
+}
+
+/* Compact filter status instead of the oversized green strip. */
+.active-filter {
+  width: fit-content;
+  max-width: 100%;
+  min-height: 42px;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  margin: -4px 0 24px;
+  padding: 5px 6px 5px 13px;
+  border: 1px solid rgba(71, 135, 132, .18);
+  border-radius: 999px;
+  background: rgba(71, 135, 132, .075);
+  color: var(--brand-teal-dark, #326c69);
+  box-shadow: none;
+  font-size: .76rem;
+  font-weight: 700;
+}
+
+.active-filter::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: var(--brand-teal, #478784);
+}
+
+#activeFilterText {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.active-filter #clearFilter {
+  min-height: 30px;
+  padding: 0 11px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 253, 249, .92);
+  color: var(--brand-red, #A94335);
+  cursor: pointer;
+  font-size: .72rem;
+  font-weight: 800;
+  white-space: nowrap;
+  box-shadow: inset 0 0 0 1px rgba(169, 67, 53, .12);
+  transition: background .18s ease, color .18s ease, transform .18s ease;
+}
+
+.active-filter #clearFilter:hover {
+  color: #fff;
+  background: var(--brand-red, #A94335);
+  transform: translateY(-1px);
+}
+
+.active-filter #clearFilter:focus-visible {
+  outline: 3px solid rgba(169, 67, 53, .20);
+  outline-offset: 2px;
+}
+
+@media (max-width: 680px) {
+  .section-head {
+    align-items: center;
+  }
+
+  .view-toggle {
+    flex: 0 0 auto;
+  }
+
+  .view-toggle button {
+    width: 34px;
+    height: 34px;
+  }
+
+  .active-filter {
+    width: 100%;
+    border-radius: 14px;
+  }
+
+  .active-filter #clearFilter {
+    margin-left: auto;
+  }
+}
