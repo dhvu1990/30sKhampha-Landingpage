@@ -26,10 +26,10 @@
 
   <title>30s Khám Phá | Công nghệ, khoa học & đời sống</title>
 
-  <link rel="icon" href="assets/brand/brand-mark-web.webp?v=0.14.0" type="image/webp">
-  <link rel="shortcut icon" href="assets/brand/brand-mark-web.webp?v=0.14.0" type="image/webp">
-  <link rel="apple-touch-icon" href="assets/brand/brand-mark-web.webp?v=0.14.0">
-  <link rel="manifest" href="manifest.webmanifest?v=0.14.0">
+  <link rel="icon" href="assets/brand/brand-mark-web.webp?v=0.14.1" type="image/webp">
+  <link rel="shortcut icon" href="assets/brand/brand-mark-web.webp?v=0.14.1" type="image/webp">
+  <link rel="apple-touch-icon" href="assets/brand/brand-mark-web.webp?v=0.14.1">
+  <link rel="manifest" href="manifest.webmanifest?v=0.14.1">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,7 +38,7 @@
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/brand-v0.11.3.css?v=0.11.3">
   <link rel="stylesheet" href="assets/css/video-affiliate-v0.13.0.css?v=0.13.0">
-  <link rel="stylesheet" href="assets/css/ui-v0.14.0.css?v=0.14.0">
+  <link rel="stylesheet" href="assets/css/ui-v0.14.1.css?v=0.14.1">
 
   <script type="application/ld+json">
   {
@@ -174,9 +174,14 @@
           <p class="eyebrow">VIDEO MỚI NHẤT</p>
           <h2>Vừa được khám phá</h2>
         </div>
-        <div class="view-toggle" aria-label="Kiểu hiển thị">
-          <button class="active" id="gridView" type="button" aria-label="Dạng lưới">▦</button>
-          <button id="listView" type="button" aria-label="Dạng danh sách">☷</button>
+        <span id="syncStatus" hidden></span>
+        <div class="view-toggle" role="group" aria-label="Kiểu hiển thị">
+          <button class="active" id="gridView" type="button" aria-label="Dạng lưới" title="Dạng lưới">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M4.5 4.5h6v6h-6zm9 0h6v6h-6zm-9 9h6v6h-6zm9 0h6v6h-6z"/></svg>
+          </button>
+          <button id="listView" type="button" aria-label="Dạng danh sách" title="Dạng danh sách">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M9 6h10M9 12h10M9 18h10"/><circle cx="5" cy="6" r="1.15" fill="currentColor"/><circle cx="5" cy="12" r="1.15" fill="currentColor"/><circle cx="5" cy="18" r="1.15" fill="currentColor"/></svg>
+          </button>
         </div>
       </div>
 
@@ -244,7 +249,7 @@
     </div>
     <div class="container footer-bottom">
       <p class="affiliate-disclosure" id="affiliateDisclosure"></p>
-      <p>© <span id="year"></span> 30s KHÁM PHÁ CÔNG NGHỆ &amp; ĐỜI SỐNG · v<span id="siteVersion">0.14.0</span></p>
+      <p>© <span id="year"></span> 30s KHÁM PHÁ CÔNG NGHỆ &amp; ĐỜI SỐNG · v<span id="siteVersion">0.14.1</span></p>
     </div>
   </footer>
 
