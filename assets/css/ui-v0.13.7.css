@@ -1,0 +1,40 @@
+@import url("ui-v0.13.6.css?v=0.13.6");
+
+/* 30s KHÁM PHÁ — compact hero social CTA layout v0.13.7 */
+.hero-actions {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.hero-actions > .btn-primary,
+.hero-actions > #youtubeChannelLink {
+  flex: 0 0 auto;
+}
+
+/* Facebook/TikTok become compact icon-only actions to keep the CTA row balanced. */
+.hero-actions .hero-social-btn {
+  width: 46px;
+  min-width: 46px;
+  height: 46px;
+  min-height: 46px;
+  flex: 0 0 46px;
+  padding: 0;
+  gap: 0;
+  border-radius: 50%;
+  font-size: 0;
+  line-height: 0;
+  box-shadow: 0 5px 16px rgba(68, 50, 34, .06);
+}
+
+.hero-actions .hero-social-btn svg {
+  width: 19px;
+  height: 19px;
+  flex: 0 0 19px;
+}
+
+.hero-actions .hero-facebook:hover,
+.hero-actions .hero-tiktok:hover {
+  transform: translateY(-2px);
+  box-shadow
