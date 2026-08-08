@@ -1,5 +1,5 @@
 {
-  "version": "0.14.3",
+  "version": "0.14.4",
   "siteName": "30s KHÁM PHÁ CÔNG NGHỆ & ĐỜI SỐNG",
   "seoTitle": "30s Khám Phá | Công nghệ, khoa học & đời sống",
   "siteUrl": "https://30skhampha.io.vn/",
@@ -17,5 +17,9 @@
     "facebook": "https://www.facebook.com/30skhampha",
     "tiktok": "https://www.tiktok.com/@30skhampha",
     "instagram": "https://www.instagram.com/30skhampha"
+  },
+  "visitorCounter": {
+    "enabled": false,
+    "endpoint": ""
   }
 }
