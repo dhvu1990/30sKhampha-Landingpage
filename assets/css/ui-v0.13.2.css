@@ -1,0 +1,85 @@
+/* 30s KHÁM PHÁ — UI cleanup + social header buttons v0.13.2 */
+
+.header-social-btn {
+  min-height: 40px;
+  padding-inline: 13px;
+  border-radius: 999px;
+  font-size: .78rem;
+  font-weight: 800;
+  white-space: nowrap;
+  border: 1px solid rgba(37, 37, 37, .12);
+  background: rgba(255, 253, 250, .74);
+  transition: transform .2s ease, background .2s ease, border-color .2s ease, color .2s ease;
+}
+
+.header-social-btn:hover {
+  transform: translateY(-1px);
+}
+
+.header-facebook {
+  color: var(--muted-teal, #478784);
+  border-color: rgba(71, 135, 132, .30);
+}
+
+.header-facebook:hover {
+  background: var(--muted-teal, #478784);
+  border-color: var(--muted-teal, #478784);
+  color: #fff;
+}
+
+.header-tiktok {
+  color: var(--brick-red, #A94335);
+  border-color: rgba(169, 67, 53, .26);
+}
+
+.header-tiktok:hover {
+  background: var(--brick-red, #A94335);
+  border-color: var(--brick-red, #A94335);
+  color: #fff;
+}
+
+/* Keep YouTube visually primary. */
+.header-youtube {
+  min-height: 40px;
+  padding-inline: 14px;
+}
+
+/* Technical sync state stays available to JS but is intentionally not shown to visitors. */
+#modePill[hidden],
+#videoCount[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 1180px) {
+  .header-inner { gap: 16px; }
+  .header-actions { gap: 6px; }
+  .header-social-btn,
+  .header-youtube {
+    padding-inline: 10px;
+    font-size: .72rem;
+  }
+}
+
+@media (max-width: 980px) {
+  .header-facebook,
+  .header-tiktok {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .header-social-btn,
+  .header-youtube {
+    display: none;
+  }
+
+  .mobile-nav .mobile-social-link {
+    display: block;
+    padding: 12px 0;
+    font-weight: 700;
+  }
+
+  .mobile-nav .mobile-social-link + .mobile-social-link {
+    border-top: 1px solid rgba(37, 37, 37, .08);
+  }
+}
